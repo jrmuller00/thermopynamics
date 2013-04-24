@@ -1,0 +1,115 @@
+#
+#       Neon FLUID DATA FILE
+#  
+#  
+
+FluidName = str Neon
+FluidFormula = str Ne
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+
+#  
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  
+#       RHOSAT EQUATION         (D-2)
+#       CV EQUATION             (C-0) 
+#       PSAT EQUATION           (S-10)
+#       PVT EQUATION            (P-10)
+#  
+#  
+#
+                
+Stanford_rhosat = int 2
+Stanford_cv = int 0
+Stanford_psat = int 10
+Stanford_pvt = int 10
+
+#  
+#  
+# 
+#
+# GLOBAL PARAMETERS
+# CRITICAL:
+#       TEMP
+#       PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR
+# REFERENCE VALUES FOR
+#       H
+#       S
+#
+
+TCrit   = float      4.440000000e1
+PCrit   = float      2.653700000e6
+vCrit   = float      2.070393375e-003
+MW      = float      2.018300000e1
+Accentric       = float 0.0
+xRef    = float      7.955089500e4
+sRef    = float      4.241515600e3
+
+
+
+
+#  
+#  
+#   STANFORD P-V-T EQUATION PARAMETERS
+#  
+#       (P-10)
+#  
+StanfordA1      = float        4.287690780e-001
+StanfordA2      = float        -4.174713960e1
+StanfordA3      = float        -1.536753850e3
+StanfordA4      = float        2.170438330e4
+StanfordA5      = float        -1.255239830e-006
+StanfordA6      = float        5.237344030e-005
+StanfordA7      = float        3.182973780e-002
+StanfordA8      = float        1.530345630e0
+StanfordA9      = float        -7.688164840e-001
+StanfordA10     = float        8.698166360e-007
+StanfordA11     = float        -8.655623590e-005
+StanfordA12     = float        -8.492662570e-007
+StanfordA13     = float        4.198732050e-011
+StanfordA14     = float        2.385475210e2
+StanfordA15     = float        -1.044350030e4
+StanfordA16     = float        -1.982535910e-003
+StanfordA17     = float        7.095589910e-002
+StanfordAgamma   = float        1.358940200e-005
+
+#
+#   STANFORD PSAT EQUATION PARAMTERS
+#  
+#       (S-10)
+#  
+StanfordF1      = float        2.207272600e1
+StanfordF2      = float        -2.442812500e2
+StanfordF3      = float        -8.211386900e-002
+StanfordF4      = float        9.465743100e-004
+
+#  
+#   STANFORD CV EQUATION PARAMTERS
+#  
+#       (C-0)
+#  
+
+StanfordG1      =  float       6.177600000e2
+StanfordT0      =  float      2.454000000e1
+
+#  
+#  
+#   STANFORD RHOSAT EQUATION PARAMETERS
+#  
+#       (D-2)
+#  
+  
+StanfordD1      = float        4.830000000e2
+StanfordD2      = float        7.281591400e2
+StanfordD3      = float        4.977353200e2
+StanfordD4      = float        -4.352520000e2
+StanfordD5      = float        3.283909500e2
+StanfordD6      = float        0

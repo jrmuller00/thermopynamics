@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{dca13930-f2aa-4654-8698-fcd558802913}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>fluids.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>thermopynamics</Name>
+    <RootNamespace>thermopynamics</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>-p 101325 -t 1000 -f rubidium -e Stanford -j 4 -v 0.5064 -x 1 -u 4</CommandLineArguments>
+    <InterpreterPath />
+    <InterpreterArguments />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="fluids.py" />
+    <Compile Include="IdealGas.py" />
+    <Compile Include="LKGas.py" />
+    <Compile Include="NBS.py" />
+    <Compile Include="RKGas.py" />
+    <Compile Include="StanfordEqns.py" />
+    <Compile Include="ThermoConst.py" />
+    <Compile Include="thermopynamics.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+</Project>

@@ -1,0 +1,161 @@
+#  
+#  	NITROGEN FLUID DATA FILE
+#  
+#  	Available EOS's
+#  
+#  	Stanford	16
+#  
+#  	TOTAL		16
+#  
+#  
+#  
+
+FluidName = str Nitrogen
+FluidFormula = str N2
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+#  
+#  
+#  	DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  	THE EQUATIONS ARE DEFINED USING 4 BITS PER EQUATION
+#  
+#  	THE LOWER 4 BITS ARE THE RHOSAT EQUATION	(D-2) = 1
+#  	THE NEXT 4 BITS ARE THE CV EQUATION		(C-4) = 4
+#  	THE NEXT 4 BITS ARE THE PSAT EQUATION		(S-4) = 3
+#  	THE NEXT 4 BITS ARE THE PVT EQUATION		(P-4) = 3
+#  
+#  	IN HEX, 
+#  
+#  	#3341H = 	0011	0011	0100	0001	BINARY	=	13121 DECIMAL
+#  
+#  			PVT	PSAT	CV	RHOSAT
+#  
+#  
+#  
+#  		
+
+Stanford_rhosat = int 2
+Stanford_cv = int 4
+Stanford_psat = int 4
+Stanford_pvt = int 4
+
+
+#  
+#  
+#  
+TCrit = float 126.2
+PCrit = float 3.4e6
+vCrit = float 3.18440913289e-003
+MW = float 28.0134
+Accentric = float 0.0
+xRef = float 1.9662281E5
+sRef = float 3.288237E3
+
+
+#  
+#  /*
+#  	STANFORD P-V-T PARAMETERS
+#  
+#  	(P-4)
+#  */
+#  
+#  STANFORDPVT_START
+#  
+StanfordA1	= float	1.7588995925697E-1
+StanfordA2	= float	1.38197604384933E1
+StanfordA3	= float	-3.1491841213392E2
+StanfordA4	= float	4.40300150239380E3
+StanfordA5	= float	-5.45358971644916e5
+StanfordA6	= float	4.84413320182919e-4
+StanfordA7	= float	-5.18964416491365e-2
+StanfordA8	= float	6.57265859197103e-4
+StanfordA9	= float	8.51299771713314e4
+StanfordA10	= float	1.33459405162578e-8
+StanfordA11	= float	3.83381319826746e-4
+StanfordA12	= float	-8.35421151028455e-2
+StanfordA13	= float	2.84874912286101e-7
+StanfordA14	= float	-2.38296116270360e-7
+StanfordA15	= float	-1.48321912935764e-4
+StanfordA16	= float	5.62605853190540e-10
+StanfordA17	= float	-2.98201050924595e-13
+StanfordA18	= float	9.85319087685241e-11
+StanfordA19	= float	-1.92002176056468e-14
+StanfordA20	= float	-7.82250103373122e4
+StanfordA21	= float	-5.51801778744598e5
+StanfordA22	= float	-5.72781957607352e-1
+StanfordA23	= float	3.25760529488327e2
+StanfordA24	= float	-1.34659309828737e-6
+StanfordA25	= float	-1.92036423064911e-5
+StanfordA26	= float	-3.94564337674524e-12
+StanfordA27	= float	-2.44388245328965e-9
+StanfordA28	= float	-1.50970602460077e-18
+StanfordA29	= float	1.25854885346038e-16
+StanfordA30	= float	-8.34271144923969e-24
+StanfordA31	= float	-1.17299202018417e-22
+StanfordA32	= float	9.06544823455730e-22
+StanfordAgamma	= float	7.13602531283233e-6
+#  
+#  STANFORDPVT_END
+#  
+#  /*
+#  	STANFORD PSAT PARAMETERS
+#  	(S-4)
+#  */
+#  
+#  STANFORDPSAT_START
+#  
+StanfordF1	= float	8.3944094440E3
+StanfordF2	= float	-1.8785191705E3
+StanfordF3	= float	-7.2822291650
+StanfordF4	= float	1.0228509660E-2
+StanfordF5	= float	5.5560638250E-4
+StanfordF6	= float	-5.9445446620E-6
+StanfordF7	= float	2.7154339320E-8
+StanfordF8	= float	-4.8795359040e-11
+StanfordF9	= float	5.0953608240e2
+StanfordFalpha	= float	1.95
+#  
+#  STANFORDPSAT_END
+#  
+#  /*
+#  
+#  	STANFORD CV EQUATION PARAMETERS
+#  	(C-4)
+#  */
+#  
+#  STANFORDCV_START
+#  
+StanfordG1	= float	-2.18203473713518e5
+StanfordG2	= float	1.01573580096247e4
+StanfordG3	= float	-1.65504721657240e2
+StanfordG4	= float	7.43175999190430e2
+StanfordG5	= float	-5.14605623546025e-3
+StanfordG6	= float	5.18347156760489e-6
+StanfordG7	= float	-1.05922170493616e-9
+StanfordG8	= float	2.98389393363817e2
+StanfordGbeta	= float	3353.40610
+StanfordT0	= float	63.15
+#  
+#  STANFORDCV_END
+#  
+#  /*
+#  	STANFORD RHOSAT EQUATION PARAMETERS
+#  	(D-2)
+#  */
+#  
+#  STANFORDRHOSAT_START
+#  
+StanfordD1	= float	3.1402991e2
+StanfordD2	= float	4.4111015e2
+StanfordD3	= float	9.4622994e2
+StanfordD4	= float	-2.9067111e3
+StanfordD5	= float	4.4785979e3
+StanfordD6	= float	-2.2746914e3
+#  
+#  STANFORDRHOSAT_END
+#  

@@ -1,0 +1,187 @@
+#  /*
+#  	ETHANE FLUID DATA FILE
+#  
+#  	Available EOS's
+#  
+#  	Ideal		
+#  	RK		
+#  	LK		
+#  	NIST		4
+#  	Stanford	16
+#  
+#  	TOTAL		20
+#  
+#  */
+#  
+FluidName = str Ethane
+FluidFormula = str C2H6
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+#  
+#  /*
+#  	DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  	THE EQUATIONS ARE DEFINED USING 4 BITS PER EQUATION
+#  
+#  	THE LOWER 4 BITS ARE THE RHOSAT EQUATION	(D-2) = 1
+#  	THE NEXT 4 BITS ARE THE CV EQUATION		(C-6) = 6
+#  	THE NEXT 4 BITS ARE THE PSAT EQUATION		(S-2) = 1
+#  	THE NEXT 4 BITS ARE THE PVT EQUATION		(P-2) = 1
+#  
+#  	IN HEX, 
+#  
+#  	#1161H = 	0001	0001	0110	0001	BINARY	=	4449 DECIMAL
+#  
+#  			PVT	PSAT	CV	RHOSAT
+#  
+#  */
+#  
+#  		
+Stanford_rhosat = int 2
+Stanford_cv = int 6
+Stanford_psat = int 2
+Stanford_pvt = int 3
+
+
+#
+# GLOBAL PARAMETERS
+# RGAS
+# CRITICAL:
+#	TEMP
+#	PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR
+# REFERENCE VALUES FOR
+#	H
+#	S
+#
+TCrit = float 305.88
+PCrit = float 5.01006051e6
+vCrit = float 4.59579943931e-3
+MW = float 30.07
+Accentric = float 0
+xRef = float 4.9861617e5
+sRef = float 3.1934536e3
+
+
+#
+# CV VALUES
+#
+cxCurveFit = str True
+cx0 = float -5.139842e4
+cx1 = float 4.815881e2
+cx2 = float -1.467331
+cx3 = float 1.481144e-3
+
+#
+# THERMAL CONDUCTIVITY
+#
+
+K0 = float -8.731071e-4
+K1 = float 3.544829e-5
+K2 = float 9.505973e-8
+K3 = float -6.501557e-11
+
+#
+# VISCOSITY
+#
+
+MU0 = float 3.391174e-6
+MU1 = float 3.290732e-8
+MU2 = float 2.415903e-11
+MU3 = float -2.252052e-14
+
+#
+# SURFACE TENSION
+#
+SIG0 = float 5.344582
+SIG1 = float -1.7989575e-2
+SIG2 = float 0 
+SIG3 = float 0 
+
+
+
+
+#  
+#  
+#  /*
+#    STANFORD P-V-T PARAMETERS
+#  
+#  	(P-2)
+#  */
+#  
+#  STANFORDPVT_START
+#  
+StanfordAA0	= float 	4.000173e2
+StanfordAB0 	= float 	1.716337e-3
+StanfordAC0	= float 	2.711853e7
+StanfordAD0	= float 	1.314084e9
+StanfordAE0	= float 	4.162885e10
+StanfordAa	= float 	1.385571
+StanfordAb	= float 	1.343479e-5
+StanfordAc	= float 	1.301434e5
+StanfordAd	= float 	2.412543e1
+StanfordAalpha	= float 	8.159501e-9
+StanfordAgamma	= float 	1.293618e-5
+#  
+#  STANFORDPVT_END
+#  
+#  /*
+#  	STANFORD PSAT 
+#  
+#  	(S-2)
+#  */
+#  
+#  STANFORDPSAT_START
+#  
+StanfordF1	= float 	-5.9040507
+StanfordF2	= float 	 2.6293983e-3
+StanfordF3	= float 	-1.6989361
+StanfordF4	= float 	 2.5761218e-1
+StanfordF5	= float 	-9.6655814e-1
+StanfordF6	= float 	  3.7608925
+StanfordF7	= float 	-6.2752642
+StanfordF8	= float 	-2.5027513e1
+StanfordTp	= float 	 200
+#  
+#  STANFORDPSAT_END
+#  
+#  /*
+#  	STANFORD CV 
+#  
+#  	(C-2)
+#  */
+#  
+#  STANFORDCV_START
+#  
+StanfordG1	= float 	2.6209109e4
+StanfordG2	= float 	3.9731855e2
+StanfordG3	= float 	2.0372154
+StanfordG4	= float 	6.3813897e-3
+StanfordG5	= float 	-7.2185581e-6
+StanfordG6	= float 	2.2048025e-9
+StanfordT0	= float 	 150
+#  
+#  STANFORDCV_END
+#  
+#  /*
+#  	STANFORD RHO SAT
+#  
+#  	(D-2)
+#  */
+#  
+#  STANFORDRHOSAT_START
+#  
+#  
+StanfordD1	= float 	 2.1758939e2
+StanfordD2	= float 	 3.9512352e2
+StanfordD3	= float 	-4.1074978e2
+StanfordD4	= float 	 2.0021645e3
+StanfordD5	= float 	-3.2750407e3
+StanfordD6	= float 	 1.9447815e3
+#  
+#  STANFORDRHOSAT_END

@@ -1,0 +1,101 @@
+#  	CESIUM FLUID DATA FILE
+#  
+#  
+FluidName = str Cesium
+FluidFormula = str Cs
+
+#
+# define which eqns are available
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+#  
+#  	DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  	RHOSAT EQUATION		(D-6)
+#  	CV EQUATION		(C-7)
+#  	PSAT EQUATION		(S-7)
+#  	PVT EQUATION		(P-7)
+#  
+#
+Stanford_rhosat = int 6
+Stanford_cv = int 7
+Stanford_psat = int 7
+Stanford_pvt = int 7	
+
+#  
+#
+#
+# GLOBAL PARAMETERS
+# CRITICAL:
+#	TEMP
+#	PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR
+# REFERENCE VALUES FOR
+#	H
+#	S
+#
+ 
+TCrit	=	float 2.047790000e3
+PCrit	=	float 1.173000000e7
+vCrit	=	float 2.378121284e-003
+MW	=	float 1.329100000e2
+Accentric	=	float 0.00
+xRef	=	float 4.779866300e5
+sRef	=	float 6.009992200e2
+
+
+#  
+
+#   STANFORD P-V-T EQUATION PARAMETERS
+#  
+#  	(P-7)
+#  
+
+StanfordA1	= float 	-1.127493000e1
+StanfordA2	= float 	5.116856000e3
+StanfordA3	= float 	-3.465370000e0
+StanfordA4	= float 	-6.820129000e3
+StanfordA5	= float 	7.693051000e6
+StanfordA6	= float 	-9.216489000e0
+StanfordA7	= float 	1.125708000e3
+StanfordA8	= float 	0.000000000e0
+StanfordA9	= float 	1.826843000e-006
+
+#  
+#   STANFORD PSAT EQUATION PARAMETERS
+#  	
+#  	(S-2)
+#  
+
+StanfordF1	= float 	2.473601000e1
+StanfordF2	= float 	-9.006562000e3
+StanfordF3	= float 	-5.329000000e-001
+
+#
+#   STANFORD CV EQUATION PARAMETERS
+#  
+#  	(C-7)
+#  
+#  
+
+StanfordG1	= float 	9.386710000e1
+StanfordG2	= float 	1.804957000e+011
+StanfordGbeta	= float 	1.738333000e4
+StanfordT0	= float 	8.000000000e2
+
+#  
+#   STANFORD RHO SAT EQUATION PARAMETERS
+#  
+#  	(D-6)
+#  
+ 
+StanfordD1	= float 	1.865883000e3
+StanfordD2	= float 	-5.051594000e-001
+StanfordD3	= float 	-8.747735000e-005
+StanfordD4	= float 	0.000000000e0
+StanfordTp	= float 	2.553700000e2

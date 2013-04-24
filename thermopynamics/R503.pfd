@@ -1,0 +1,99 @@
+#  	R-503 FLUID DATA FILE
+#  
+#  	Available EOS's
+#  
+#  	Ideal		
+#  	RK		
+#  	LK		
+#  	Stanford	
+#  
+#  
+
+FluidName = str R503
+FluidFormula = str 40.1%CHF3·59.9%CClF3
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+#  
+#  	DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  	RHOSAT EQUATION	(D-1)
+#  	CV EQUATION	(C-1)
+#  	PSAT EQUATION	(S-1)
+#  	PVT EQUATION	(P-8)
+#  
+#  		
+Stanford_rhosat = int 1
+Stanford_cv = int 1
+Stanford_psat = int 1
+Stanford_pvt = int 8
+
+#
+#  
+#  
+#
+# GLOBAL PARAMETERS
+# 
+
+TCrit	= float	2.925900000e2
+PCrit	= float	4.325600000e6
+vCrit	= float	1.919201610e-003
+MW	= float	8.750000000e1
+Accentric	= float	0.000000000e0
+xRef	= float	1.645475300e5
+sRef	= float	1.156235700e3
+
+
+
+#  
+#   STANFORD P-V-T EQUATION PARAMETERS
+#  
+#  	(P-8)
+#  
+
+StanfordAa	= float	1.313944500e3
+StanfordAb	= float	5.583749900e-004
+
+#  
+#   STANFORD PSAT EQUATION PARAMETERS
+#  
+#  	(S-1)
+#  
+
+StanfordF1	= float	4.403680960e1
+StanfordF2	= float	-1.995771310e3
+StanfordF3	= float	-4.491690000e0
+StanfordF4	= float	1.222050990e-002
+StanfordF5	= float	-1.767100000e-001
+StanfordFgamma	= float	2.970400000e2
+
+#  
+#   STANFORD CV EQUATION PARAMETERS
+#  
+#  	(C-1)
+#  
+
+StanfordG1	= float	1.698794100e2
+StanfordG2	= float	1.233735242e0
+StanfordG3	= float	1.241300119e-003
+StanfordG4	= float	-2.462789570e-006
+StanfordG5	= float	0.000000000e0
+StanfordT0	= float	1.500000000e2
+
+#  
+#   STANFORD RHOSAT EQUATION PARAMTERS
+#  
+#  	(D-1)
+#  
+
+StanfordD1	= float	5.210480060e2
+StanfordD2	= float	2.089253902e3
+StanfordD3	= float	-5.379287269e3
+StanfordD4	= float	1.043202080e4
+StanfordD5	= float	-5.991462863e3
+StanfordD6	= float	0.000000000e0
+StanfordD7	= float	0.000000000e0
+  

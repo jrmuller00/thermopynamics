@@ -1,0 +1,170 @@
+#
+#       CARBON DIOXIDE FLUID DATA FILE
+#
+#       Available EOS's
+#
+#       Ideal           1
+#       RK              2
+#       LK              8
+#       Stanford        16
+#
+#       TOTAL           27
+#
+FluidName = str Carbon_Dioxide
+FluidFormula = str CO2
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+Usecv = str True  
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#
+#       THE EQUATIONS ARE DEFINED USING 4 BITS PER EQUATION
+#
+#       THE LOWER 4 BITS ARE THE RHOSAT EQUATION        (D-2) = 1
+#       THE NEXT 4 BITS ARE THE CV EQUATION             (C-6) = 6
+#       THE NEXT 4 BITS ARE THE PSAT EQUATION           (S-2) = 1
+#       THE NEXT 4 BITS ARE THE PVT EQUATION            (P-3) = 2
+#
+#
+#              
+
+Stanford_rhosat = int 2
+Stanford_cv = int 6
+Stanford_psat = int 2
+Stanford_pvt = int 3
+
+#
+# GLOBAL PARAMETERS
+# RGAS
+# CRITICAL:
+#       TEMP
+#       PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR (omega)
+# REFERENCE VALUES FOR
+#       H
+#       S
+#
+TCrit = float 304.21
+PCrit = float 7.3834e6
+vCrit = float 2.155172413793e-3
+MW = float 44.01
+Accentric = float 0.0
+xRef = float 3.2174105e5
+sRef = float 2.1396056e3
+
+
+#
+# CV VALUES
+#
+cxCurveFit = str True
+cx0 = float -5.139842e4
+cx1 = float 4.815881e2
+cx2 = float -1.467331
+cx3 = float 1.481144e-3
+
+#
+# THERMAL CONDUCTIVITY
+#
+kCurveFit = str True
+k0 = float -8.731071e-4
+k1 = float 3.544829e-5
+k2 = float 9.505973e-8
+k3 = float -6.501557e-11
+
+#
+# VISCOSITY
+#
+muCurveFit = str True
+mu0 = float 3.391174e-6
+mu1 = float 3.290732e-8
+mu2 = float 2.415903e-11
+mu3 = float -2.252052e-14
+
+#
+# SURFACE TENSION
+#
+sigmaCurveFit = str True
+sigma0 = float 5.344582
+sigma1 = float -1.7989575e-2
+sigma2 = float 0 
+sigma3 = float 0 
+
+#
+# STANFORD P-V-T PARAMETERS
+#
+#       (P-3)
+#
+#
+
+StanfordA1 =  float 2.248858000e-001
+StanfordA2 =  float -1.371796500e002
+StanfordA3 =  float -1.443021400e004
+StanfordA4 =  float -2.963049100e006
+StanfordA5 =  float -2.060603900e008
+StanfordA6 =  float      4.555439300e-005
+StanfordA7 =  float      7.704284000e-002
+StanfordA8 =  float      4.060237100e001
+StanfordA9 =  float      4.002950900e-007
+StanfordA10 =  float      -3.943607700e-004
+StanfordA11 =  float      1.211528600e-010
+StanfordA12 =  float      1.078338600e-007
+StanfordA13 =  float      4.396233600e-011
+StanfordA14 =  float      -3.650554500e004
+StanfordA15 =  float      1.949051100e007
+StanfordA16 =  float      -2.918671800e009 
+StanfordA17 =  float  2.435862700e-002 
+StanfordA18 =  float -3.754653000e001 
+StanfordA19 =  float 1.189814100e004 
+StanfordAgamma = float 5.000000000e-006 
+
+#
+#       STANFORD PSAT 
+#
+#       (S-2)
+#
+
+StanfordF1      =    float    -6.541261000e000 
+StanfordF2      =    float    -2.791463600e-001 
+StanfordF3      =    float    -3.471620200e000 
+StanfordF4      =    float    -3.498963700e000 
+StanfordF5      =    float     -1.977094800e001 
+StanfordF6      =    float    1.392283900e002 
+StanfordF7      =    float    -2.767038900e002 
+StanfordF8      =    float    -7.051025100e003 
+StanfordTp      =    float    2.500000000e002 
+
+
+#
+#       STANFORD CV 
+#
+#       (C-6)
+#
+
+StanfordG1      =    float    8.726361000e003 
+StanfordG2      =    float    1.840040000e002 
+StanfordG3      =    float    1.914025000e000 
+StanfordG4      =    float    -1.667825000e-003 
+StanfordG5      =    float    7.305950000e-007 
+StanfordG6      =    float    -1.255290000e-010 
+StanfordT0      =    float    2.165400000e002 
+
+#
+#       STANFORD RHO SAT
+#
+#       (D-2)
+#
+
+StanfordD1      =    float    4.640000900e002 
+StanfordD2      =    float    6.793812900e002 
+StanfordD3      =    float    1.477683600e003 
+StanfordD4      =    float    -3.126767000e003 
+StanfordD5      =    float    3.639765600e003 
+StanfordD6      =    float    -1.343709800e003 
+
+
+EndDataFile

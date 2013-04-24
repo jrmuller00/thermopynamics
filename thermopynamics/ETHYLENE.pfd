@@ -1,0 +1,131 @@
+#  
+#       ETHYLENE FLUID DATA FILE
+#  
+#  
+#  Basic fluid data
+#
+
+FluidName = str Ethylene
+FluidFormula = str C2H4
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+#  
+#  
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#       RHOSAT EQUATION        (D-2) = 1
+#       CV EQUATION             (C-2) = 2
+#       PSAT EQUATION           (S-2) = 1
+#       PVT EQUATION            (P-3) = 2
+#  
+#  
+#  
+#  
+#               
+Stanford_rhosat = int 2
+Stanford_cv = int 2
+Stanford_psat = int 2
+Stanford_pvt = int 3
+
+#  
+#  
+MW = float 28.054
+TCrit = float 282.65
+PCrit = float 5.075e6
+vCrit = float 4.61531361056E-3
+Accentric = float 0.0
+xRef = float 4.6760769e5
+sRef = float 3.2657141e3
+
+cxCurveFit = str False
+
+#  
+#  
+#    STANFORD P-V-T PARAMETERS
+#  
+#       (P-3)
+#  
+#  
+#  
+#  
+StanfordA1      = float    6.199009568e-1
+StanfordA2      = float        -5.480331377e2
+StanfordA3      = float   5.939028162e4
+StanfordA4      = float       -2.978456992e7
+StanfordA5      = float        1.410862498e9
+StanfordA6      = float        2.099253547e-3
+StanfordA7      = float       -3.023961281e-1
+StanfordA8      = float        2.126582512e2
+StanfordA9      = float        4.064840279e-6
+StanfordA10     = float       -4.409410402e-3
+StanfordA11     = float        4.569939966e-10
+StanfordA12     = float        6.188244460e-6
+StanfordA13     = float        5.16189590e-10
+StanfordA14     = float        5.920592324e4
+StanfordA15     = float       -3.868585434e7
+StanfordA16     = float        6.383210497e9
+StanfordA17     = float       -3.452285470
+StanfordA18     = float        2.067324621e3
+StanfordA19     = float       -2.179125512e5
+StanfordAgamma   = float        2.1e-5
+#  
+#  
+#  
+#  
+#       STANFORD PSAT 
+#  
+#       (S-2)
+#  
+#  
+StanfordF1      =   float     -5.8351826
+StanfordF2      =   float     -1.0535323e-1
+StanfordF3      =   float     -1.4231237
+StanfordF4      =   float     -4.2199146e-1
+StanfordF5      =   float     -1.8385922
+StanfordF6      =   float      1.1504786e1
+StanfordF7      =   float     -1.5509321e1
+StanfordF8      =   float     -1.0601457e2
+StanfordTp      =   float      200
+
+#  
+#  
+#  
+#       STANFORD CV 
+#  
+#       (C-2)
+#  
+
+StanfordG1      =  float          1.0657565e3
+StanfordG2      =  float          -2.5996503
+StanfordG3      =  float           3.0370139e-3
+StanfordG4      =  float           7.5775277e-5
+StanfordG5      =  float          -2.5613127e-7
+StanfordG6      =  float           3.5699585e-10
+StanfordG7      =  float          -2.3618747e-13
+StanfordG8      =  float           6.1095297e-17
+StanfordG9      =  float           0.0
+StanfordT0      =  float           150
+StanfordcvN	=  int		8
+
+#  
+#       STANFORD RHO SAT
+#  
+#       (D-2)
+#  
+#  
+
+StanfordD1      =  float                 2.1667533e2
+StanfordD2      =  float                 2.7238643e2
+StanfordD3      =  float                 6.7325682e2
+StanfordD4      =  float                -1.2879223e3
+StanfordD5      =  float                 1.3553807e3
+StanfordD6      =  float                -4.6055649e2
+
+
+
+
+EndDataFile

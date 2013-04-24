@@ -1,0 +1,143 @@
+#  /*
+#       AMMONIA FLUID DATA FILE
+#  
+#       Available EOS's
+#  
+#       Stanford        16
+#  
+#       TOTAL           16
+#  
+#  */
+
+FluidName = str Argon
+FluidFormula = str Ar
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+Usecv = str True 
+#  
+#  /*
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#       THE EQUATIONS ARE DEFINED USING 4 BITS PER EQUATION
+#  
+#       THE LOWER 4 BITS ARE THE RHOSAT EQUATION        (D-2)
+#       THE NEXT 4 BITS ARE THE CV EQUATION             (C-0)
+#       THE NEXT 4 BITS ARE THE PSAT EQUATION           (S-2)
+#       THE NEXT 4 BITS ARE THE PVT EQUATION            (P-3) = 
+#  
+#       IN HEX, 
+#  
+#       #5121H =        0101    0001    0010    0001    BINARY  =       20769 DECIMAL
+#  
+#                       PVT     PSAT    CV      RHOSAT
+#  
+#  */
+#  
+#               
+Stanford_rhosat = int 2
+Stanford_cv = int 0
+Stanford_psat = int 2
+Stanford_pvt = int 3
+
+#  
+#  
+#  
+MW = float 39.948
+TCrit = float 150.70
+PCrit = float 4.86492e6
+vCrit = float 1.9493177E-03
+Accentric = float 0.0
+xRef = float 1.493554e5
+sRef = float  2.27067e3
+
+cxCurveFit = str False
+
+#  
+#  
+#  
+#  /*
+#    STANFORD P-V-T PARAMETERS
+#  
+#       (P-3)
+#  */
+#  
+#  STANFORDPVT_START
+#  
+#  
+StanfordA1 =  float 1.9825921e-1
+StanfordA2 =  float -8.1733119e1
+StanfordA3 =  float 1.777747e3
+StanfordA4 =  float -8.2406544e5
+StanfordA5 =  float 3.1666098e7
+StanfordA6 =  float -4.4202671e-5 
+StanfordA7 =  float 6.216142e-2  
+StanfordA8 =  float  1.1443248 
+StanfordA9 =  float  4.779752e-7 
+StanfordA10 =  float -1.9645227e-4  
+StanfordA11 =  float -2.1572754e-10   
+StanfordA12 =  float 1.6544141e-7   
+StanfordA13 =  float -2.8142112e-11    
+StanfordA14 =  float 8.2532059e1    
+StanfordA15 =  float -9.1538377e3     
+StanfordA16 =  float -1.8340752e6     
+StanfordA17 =  float -3.3858136e-3  
+StanfordA18 =  float 1.5532886
+StanfordA19 =  float -6.7479568e1 
+StanfordAgamma = float 3.5e-6 
+#  
+#  STANFORDPVT_END
+#  
+#  /*
+#       STANFORD PSAT 
+#  
+#       (S-2)
+#  */
+#  
+#  STANFORDPSAT_START
+#  
+StanfordF1      =  float   -5.340410   
+StanfordF2      =  float   -2.37128e-1   
+StanfordF3      =  float   -9.490142e-1   
+StanfordF4      =  float   1.187040   
+StanfordF5      =  float   -5.889895   
+StanfordF6      =  float   5.627790   
+StanfordF7      =  float   2.674117e1  
+StanfordF8      =  float   -6.661814e1  
+StanfordTp      =  float   100  
+#  
+#  STANFORDPSAT_END
+#  
+#  /*
+#       STANFORD CV 
+#  
+#       (C-2)
+#  */
+#  
+#  STANFORDCV_START
+#  
+StanfordG1      =  float 312.192
+StanfordT0      =  float 83.8
+
+#  
+#  STANFORDCV_END
+#  
+#  /*
+#       STANFORD RHO SAT
+#  
+#       (D-2)
+#  */
+#  
+#  STANFORDRHOSAT_START
+#  
+StanfordD1      = float      2.3763863e2
+StanfordD2      = float      2.2030340e2
+StanfordD3      = float      1.1999997e3
+StanfordD4      = float      -1.9145612e3
+StanfordD5      = float      1.7358862e3
+StanfordD6      = float      -5.5587491e2
+#  
+#  STANFORDRHOSAT_END

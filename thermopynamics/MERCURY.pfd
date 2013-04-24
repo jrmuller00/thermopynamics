@@ -1,0 +1,112 @@
+#  /*
+#       Mercury FLUID DATA FILE
+#  
+
+#  
+#  */
+#  
+FluidName = str Mercury
+FluidFormula = str Hg
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+#  
+#  /*
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  
+#  
+#       RHOSAT EQUATION         (D-8) 
+#       CV EQUATION             (C-0)
+#       PSAT EQUATION           (S-9)
+#       PVT EQUATION            (P-9)
+#  
+Stanford_rhosat = int 8
+Stanford_cv = int 0
+Stanford_psat = int 9
+Stanford_pvt = int 9
+
+#
+# GLOBAL PARAMETERS
+# CRITICAL:
+#       TEMP
+#       PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR
+# REFERENCE VALUES FOR
+#       H
+#       S
+#
+#  
+
+TCrit   = float      1.763000000e003
+PCrit   = float      1.530000000e008
+vCrit   = float      1.817983493e-004
+MW      = float      2.006000000e002
+Accentric       = float      0.000000000e000
+xRef    = float      2.853355700e005
+sRef    = float      5.5681521E2
+
+
+
+#  
+#  /*
+#   STANFORD P-V-T EQUATION PARAMETERS
+#  
+#       (P-9)
+#  */
+#  
+#  STANFORDPVT_START
+#  
+StanfordA1      = float        1.033378800e1
+StanfordA2      = float        -3.120953700e2
+StanfordA3      = float        -2.079498000
+#  
+#  STANFORDPVT_END
+#  
+#  /*
+#   STANFORD PSAT EQUATION PARAMETERS
+#  
+#       (S-9)
+#  */
+#  
+#  STANFORDPSAT_START
+#  
+StanfordF1      = float        2.363209000e1
+StanfordF2      = float        -7.042620800e3
+StanfordF3      = float        -1.207439800e-1
+StanfordF4      = float        -5.806029000e4
+#  
+#  STANFORDPSAT_END
+#  
+#  /*
+#   STANFORD CV EQUATION PARAMETERS
+#  
+#       (C-0)
+#  */
+#  
+#  STANFORDCV_START
+#  
+StanfordG1      = float        62.168
+StanfordT0      = float        400.0
+#  
+#  STANFORDCV_END
+#  
+#  /*
+#   STANFORD RHOSAT EQUATION PARAMETERS
+#  
+#       (D-8)
+#  */
+#  
+#  STANFORDRHOSAT_START
+#  
+StanfordD1      = float        1.281360700e4
+StanfordD2      = float        -2.453051900
+StanfordD3      = float        -2.667268100e-4
+StanfordTp      = float        6.000000000e2
+#  
+#  STANFORDRHOSAT_END
+#  

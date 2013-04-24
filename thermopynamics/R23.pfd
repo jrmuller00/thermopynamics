@@ -1,0 +1,114 @@
+#  	R-23 FLUID DATA FILE
+#  
+#  
+#  Basic fluid data
+#
+
+FluidName = str R23
+FluidFormula = str CHF3
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+#  
+#  
+#       DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#       RHOSAT EQUATION        (D-1) = 1
+#       CV EQUATION             (C-1) = 1
+#       PSAT EQUATION           (S-8) = 8
+#       PVT EQUATION            (P-1) = 1
+#  
+#  
+#  
+#  
+#               
+Stanford_rhosat = int 1
+Stanford_cv = int 1
+Stanford_psat = int 8
+Stanford_pvt = int 1
+
+#  
+#  
+
+MW = float 70.02
+TCrit = float 299.07
+PCrit = float 4.8358e6
+vCrit = float 1.90468935E-03
+Accentric = float 0.0
+xRef = float 2.5215188e5
+sRef = float 1.63222250e3
+
+cxCurveFit = str False
+
+#  
+#   STANFORD P-V-T EQUATION PARAMTERS
+#  
+#  	(P-1)
+#
+#  
+StanfordAb	= float 7.80347723e-5
+StanfordA2	= float -1.25740395e2
+StanfordA3	= float -2.09263831e-2
+StanfordA4	= float 2.16566424e-4
+StanfordA5	= float -2.52905160e-7
+StanfordA6	= float 5.17269509e11
+StanfordB2	= float 1.67967396e-1
+StanfordB3	= float 2.33504859e-4
+StanfordB4	= float -6.94467544e-7
+StanfordB5	= float 7.59664683e-10	
+StanfordB6	= float -1.38278797e9
+StanfordC2	= float -4.29323755e3
+StanfordC3	= float 9.96617861
+StanfordC4	= float 0.0
+StanfordC5	= float -4.83394763e-6	
+StanfordC6	= float 0.0	
+StanfordAkappa	= float 5.5
+StanfordAalpha	= float 8329.62	
+StanfordAc	= float 0.0
+
+
+#
+# STANFORD PSAT EQUATION PARAMETERS
+#
+# 	(S-8)
+#
+#
+
+StanfordF1	= float 6.81234858e2
+StanfordF2	= float -1.01732931e4
+StanfordF3	= float -1.4451123e2
+StanfordF4	= float 1.00348278
+StanfordF5	= float -1.58761756e-3
+StanfordF6	= float 1.26698956e-6
+
+
+#  
+#  
+#   STANFORD CV EQUATION PARAMETERS
+#  
+#  	(C-1)
+#  
+
+StanfordG1	= float 3.193727465e2
+StanfordG2	= float -5.698757731e-2
+StanfordG3	= float 5.299352295e-3
+StanfordG4	= float -5.994244055e-6
+StanfordG5	= float 0.0
+StanfordT0	= float 150.0
+
+#  
+#   STANFORD RHOSAT EQUATION PARAMETERS
+#  
+#  	(D-1)
+#  
+
+StanfordD1	= float 5.250191523e2
+StanfordD2	= float 1.01521793e3
+StanfordD3	= float -4.053534286e2
+StanfordD4	= float 2.309256114e3
+StanfordD5	= float -1.700088257e3
+StanfordD6	= float 0.0
+StanfordD7	= float 0.0

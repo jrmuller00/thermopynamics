@@ -1,0 +1,103 @@
+#
+# Rubisdium data file
+#
+
+FluidName = str Rubidium
+FluidFormula = str Rb
+
+#
+# define which eqns are available
+Idealeos = str True
+RKeos = str True
+LKeos = str True
+Stanfordeos = str True
+NBSeos = str false
+
+
+#  
+#  	DEFINE THE STANFORD EQUATIONS TO USE
+#  
+#  	RHOSAT EQUATION		(D-7)
+#  	CV EQUATION		(C-7)
+#  	PSAT EQUATION		(S-9)
+#  	PVT EQUATION		(P-7)
+#  
+#
+
+Stanford_rhosat = int 7
+Stanford_cv = int 7
+Stanford_psat = int 9
+Stanford_pvt = int 7
+	
+#  
+#
+#
+# GLOBAL PARAMETERS
+# CRITICAL:
+#	TEMP
+#	PRESS
+# MOLECULAR WEIGHT
+#
+# ACCENTRIC FACTOR
+# REFERENCE VALUES FOR
+#	H
+#	S
+
+TCrit	=	float 2105.9
+PCrit	=	float 13.39e6
+vCrit	=	float 2.70087779E-03
+MW	=	float 85.48
+Accentric	=	float 0.0
+xRef	=	float 7.4868607e5
+sRef	=	float 8.7177399e2
+
+
+#   STANFORD P-V-T EQUATION PARAMETERS
+#  
+#  	(P-7)
+#  
+
+StanfordA1	= float -1.074092e1
+StanfordA2	= float 5.771685e3
+StanfordA3	= float -5.476099
+StanfordA4	= float 7.767259e2
+StanfordA5	= float 4.049067e6
+StanfordA6	= float -6.498737
+StanfordA7	= float -6.148542e3
+StanfordA8	= float 8.432152e6
+StanfordA9	= float 8.135142e-6
+
+#  
+#   STANFORD PSAT EQUATION PARAMETERS
+#  	
+#  	(S-9)
+#  
+
+StanfordF1	= float 6.1540106e1
+StanfordF2	= float -1.9981647e4
+StanfordF3	= float -4.7487641
+StanfordF4	= float 3.0981909e6
+
+#
+#   STANFORD CV EQUATION PARAMETERS
+#  
+#  	(C-7)
+#  
+#  
+
+StanfordG1	= float 1.4563e2
+StanfordG2	= float 6.6020e10
+StanfordGbeta	= float 17738
+StanfordT0	= float 1000
+
+#  
+#   STANFORD RHO SAT EQUATION PARAMETERS
+#  
+#  	(D-7)
+#  
+ 
+StanfordD1	= float 3.7025000e2
+StanfordD2	= float -5.0591467e3
+StanfordD3	= float 4.9774057e3
+StanfordD4	= float 1.4965687e3
+StanfordDalpha  = float 0.76
