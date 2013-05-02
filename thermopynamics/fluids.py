@@ -31,7 +31,7 @@ class ThermoProps(object):
 
 
     def setFluid(self, FluidName, clear='True'):
-        """Use this function to read in fluid properties into the hash table"""
+        """Use this function to read fluid properties into the hash table"""
         if clear == 'True':
             self.Thermo.clear()
         Filename = FluidName + ".pfd"

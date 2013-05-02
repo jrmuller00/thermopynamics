@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{dca13930-f2aa-4654-8698-fcd558802913}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>fluids.py</StartupFile>
+    <StartupFile>thermopynamics.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,7 +26,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="fluids.py" />
     <Compile Include="IdealGas.py" />
     <Compile Include="LKGas.py" />
     <Compile Include="NBS.py" />
