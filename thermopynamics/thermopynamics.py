@@ -28,6 +28,86 @@ class ThermoProps(object):
         self.Thermo['Region'] = ""
         self.Thermo['Density'] = 0 
 
+    #
+    # Define get/set functions for thermo properties
+    # T, p, v, u, h, s, x
+
+    def getPressure():
+        return self.Thermo['Pressure']
+
+    def setPressure(p):
+        self.Thermo['Pressure'] = p
+        return
+
+    def getTemperature():
+        return self.Thermo['Temperature'] 
+
+    def setTemperature(t):
+        self.Thermo['Temperature'] = t
+        return
+
+    def getSpecificEnergy():
+        return self.Thermo['SpEnergy']
+
+    def setSpecificEnergy(u):
+        self.Thermo['SpEnergy'] = u
+        return
+
+    def getSpecificEnthalpy():
+        return self.Thermo['SpEnthalpy']
+
+    def setSpecificEnthalpy(h):
+        self.Thermo['SpEnthalpy'] = h
+        return
+
+    def getSpecificEntropy():
+        return self.Thermo['SpEntropy']
+
+    def setSpecificEntropy(s):
+        self.Thermo['SpEntropy'] = s
+        return
+    def getQuality():
+        return self.Thermo['Quality']
+
+    def setQuality(x):
+        self.Thermo['Quality'] = x
+        return
+
+    def setJobID(job):
+        """
+        set the job id for the props
+        """
+        self.Thermo['job'] = job
+        return
+
+    def setJob(strjob):
+        jobl = strjob.lower()
+        if jobl() == 'tp':
+            setJobID(1)
+        elif jobl == 'tv':
+            setJobID(2)
+        elif jobl == 'ts':
+            setJobID(3)
+        elif jobl == 'tx':
+            setJobID(4)
+        elif jobl == 'pv':
+            setJobID(5)
+        elif jobl == 'ph':
+            setJobID(6)
+        elif jobl == 'ps':
+            setJobID(7)
+        elif jobl == 'px':
+            setJobID(8)
+        else:
+            print ('Invalid job type')
+        return
+
+    def getEOS():
+        return self.Thermo['eos']
+
+    def setEOS(eos):
+        self.Thermo['eos'] = eos
+        return
 
 
     def setFluid(self, FluidName, clear='True'):
