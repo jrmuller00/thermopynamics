@@ -8,9 +8,6 @@ import math
 import sys
 import getopt
 
-
-
-
 class ThermoProps(object):
     """A class to calculate thermo props for a specified EOS"""
 
@@ -32,80 +29,94 @@ class ThermoProps(object):
     # Define get/set functions for thermo properties
     # T, p, v, u, h, s, x
 
-    def getPressure():
+    def getPressure(self):
         return self.Thermo['Pressure']
 
-    def setPressure(p):
+    def setPressure(self,p):
         self.Thermo['Pressure'] = p
         return
 
-    def getTemperature():
+    def getTemperature(self):
         return self.Thermo['Temperature'] 
 
-    def setTemperature(t):
+    def setTemperature(self,t):
         self.Thermo['Temperature'] = t
         return
 
-    def getSpecificEnergy():
+    def getSpecificVolume(self):
+        return self.Thermo['SpVolume']
+
+    def setSpecificVolume(self,v):
+        self.Thermo['SpVolume'] = v
+        return
+
+    def getSpecificEnergy(self):
         return self.Thermo['SpEnergy']
 
-    def setSpecificEnergy(u):
+    def setSpecificEnergy(self,u):
         self.Thermo['SpEnergy'] = u
         return
 
-    def getSpecificEnthalpy():
+    def getSpecificEnthalpy(self):
         return self.Thermo['SpEnthalpy']
 
-    def setSpecificEnthalpy(h):
+    def setSpecificEnthalpy(self,h):
         self.Thermo['SpEnthalpy'] = h
         return
 
-    def getSpecificEntropy():
+    def getSpecificEntropy(self):
         return self.Thermo['SpEntropy']
 
-    def setSpecificEntropy(s):
+    def setSpecificEntropy(self,s):
         self.Thermo['SpEntropy'] = s
         return
-    def getQuality():
+    def getQuality(self):
         return self.Thermo['Quality']
 
-    def setQuality(x):
+    def setQuality(self,x):
         self.Thermo['Quality'] = x
         return
 
-    def setJobID(job):
+    def setJobID(self,job):
         """
         set the job id for the props
         """
         self.Thermo['job'] = job
         return
 
+    def getUnitSys(self):
+        return self.Thermo['NBSUnitSys'] 
+
+    def setUnitSys(self, u):
+        self.Thermo['NBSUnitSys'] = u
+        return
+
     def setJob(strjob):
         jobl = strjob.lower()
-        if jobl() == 'tp':
+        if jobl == 'tp' or jobl == 'pt':
             setJobID(1)
-        elif jobl == 'tv':
+        elif jobl == 'tv' or jobl == 'vt':
             setJobID(2)
-        elif jobl == 'ts':
+        elif jobl == 'ts' or jobl == 'st':
             setJobID(3)
-        elif jobl == 'tx':
+        elif jobl == 'tx' or jobl == 'xt':
             setJobID(4)
-        elif jobl == 'pv':
+        elif jobl == 'pv' or jobl == 'vp':
             setJobID(5)
-        elif jobl == 'ph':
+        elif jobl == 'ph' or jobl == 'hp':
             setJobID(6)
-        elif jobl == 'ps':
+        elif jobl == 'ps' or jobl == 'sp':
             setJobID(7)
-        elif jobl == 'px':
+        elif jobl == 'px' or jobl == 'xp':
             setJobID(8)
         else:
             print ('Invalid job type')
         return
 
-    def getEOS():
+    def getEOS(self):
         return self.Thermo['eos']
 
-    def setEOS(eos):
+    def setEOS(self,eos):
         self.Thermo['eos'] = eos
         return
 
@@ -143,6 +154,7 @@ class ThermoProps(object):
                             self.Thermo[tokens[0]] = int(tokens[3])
                         else:
                             self.Thermo[tokens[0]] = tokens[3].strip()
+        return
 
 
 
@@ -478,25 +490,25 @@ def main():
         if o in ("-c"):
             pass
         if o in ("-p"):
-            props.Thermo['Pressure'] = float(arg)
+            props.setPressure(float(arg))
         if o in ("-t"):
-            props.Thermo['Temperature'] = float(arg)
+            props.setTemperature(float(arg))
         if o in ("-e"):
-            props.Thermo['eos'] = arg
+            props.setEOS(arg)
         if o in ("-f"):
             props.setFluid(arg,'False')
         if o in ("-v"):
-            props.Thermo['SpVol'] = float(arg)
+            props.setSpecificVolume(float(arg))
         if o in ("-s"):
-            props.Thermo['SpEntropy'] = float(arg)
+            props.setSpecificEntropy(float(arg))
         if o in ("-h"):
-            props.Thermo['SpEnthalpy'] = float(arg)
+            props.setSpecificEnthalpy(float(arg))
         if o in ("-x"):
-            props.Thermo['Quality'] = float(arg)
+            props.setQuality(float(arg))
         if o in ("-j"):
-            props.Thermo['job'] = int(arg,10)
+            props.setJobID(int(arg,10))
         if o in ("-u"):
-            props.Thermo['NBSUnitSys'] = int(arg,10)
+            props.setUnitSys(int(arg,10))
 
 
     props.calcProps()

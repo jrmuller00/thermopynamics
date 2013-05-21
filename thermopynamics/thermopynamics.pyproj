@@ -13,7 +13,7 @@
     <Name>thermopynamics</Name>
     <RootNamespace>thermopynamics</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-p 101325 -t 1000 -f rubidium -e Stanford -j 4 -v 0.5064 -x 1 -u 4</CommandLineArguments>
+    <CommandLineArguments>-p 101325 -t 500 -f water -e NBS -j 1 -u 4</CommandLineArguments>
     <InterpreterPath />
     <InterpreterArguments />
   </PropertyGroup>
