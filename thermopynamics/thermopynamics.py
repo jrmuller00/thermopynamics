@@ -24,6 +24,9 @@ class ThermoProps(object):
         self.Thermo['Quality'] = 0
         self.Thermo['Region'] = ""
         self.Thermo['Density'] = 0 
+        self.Thermo['chartType'] = 'none'
+        self.Thermo['chartIso'] = 'none'
+        self.Thermo['chartNumLines'] = 0
 
     #
     # Define get/set functions for thermo properties
@@ -156,6 +159,50 @@ class ThermoProps(object):
                             self.Thermo[tokens[0]] = tokens[3].strip()
         return
 
+    def setchartType(self,type):
+        """
+        set teh chart type for the properties.
+        there are 3 types, T-s, P-h and P-v
+        """
+        typel =type.lower()
+        if typel in ['ts','hs','pv']:
+            self.Thermo['chartType'] = type
+        else:
+            print ('Invalid chart type')
+        return
+
+    def getchartType(self):
+        """
+        get the chart type from the 
+        dictionary
+        """
+        return self.Thermo['chartType']
+
+    def setchartIsoLines(self,iso):
+        """
+        This will set the iso lines to plot 
+        on the graph.  Valid values are:
+        for T-s chart: p,h,x,v
+        for P-h chart: t,x,v,s
+        for h-s chart: t,p,v,x
+
+        since this is dependent on the chart 
+        type which may or may not be set, the check will be done 
+        when generating the chart
+        """
+
+        self.Thermo['chartIso'] = iso.lower()
+        return
+
+    def getchartIsoLines(self):
+        return self.Thermo['chartIso']
+
+    def setchartNumIsoLines(self,numlines):
+        self.Thermo['chartNumLines'] = numlines
+        return
+
+    def getchartNumLines(self):
+        return self.Thermo['chartNumLines']
 
 
     def calcProps(self):
@@ -471,11 +518,31 @@ class ThermoProps(object):
     def NBS(self):
         nbs.NBSprops(self.Thermo)
 
+
+    def makeChart(self):
+        """
+        This function will create a chart (T-s, P-v, P-h, h-s)
+        depending on user input.  The chart will show the 
+        saturation dome and a number of iso lines chosen by the user
+        (one set of iso lines at this time).  the code will start at 
+        5K above T0 and stop 5K below Tcrit (for T-s, same for others)
+
+        The function is only valid for Stanford and NBS
+        """
+
+        eos = self.Thermo['eos']
+
+        if eos in ['NBS', 'Stanford']:
+            print ('OK')
+        else:
+            print ('Invalid eos for charts')
+
+
         
 def main():
     # parse command line options
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:cf:j:p:t:e:u:x:v:", ["help"])
+        opts, args = getopt.getopt(sys.argv[1:], "h:cf:j:p:t:e:u:x:v:", ["help","chart","iso","numlines"])
         
     except getopt.error as msg:
         print (msg)
