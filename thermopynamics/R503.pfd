@@ -15,7 +15,7 @@ Idealeos = str True
 RKeos = str True
 LKeos = str True
 Stanfordeos = str True
-NBSeos = str false
+NBSeos = str False
 
 #  
 #  	DEFINE THE STANFORD EQUATIONS TO USE

@@ -7,6 +7,9 @@ import ThermoConst as thermc
 import math
 import sys
 import getopt
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 class ThermoProps(object):
     """A class to calculate thermo props for a specified EOS"""
@@ -27,6 +30,38 @@ class ThermoProps(object):
         self.Thermo['chartType'] = 'none'
         self.Thermo['chartIso'] = 'none'
         self.Thermo['chartNumLines'] = 0
+        self.Thermo['chartTmin'] = 0.0
+        self.Thermo['chartTmax'] = 0.0
+        self.Thermo['chartPmin'] = 0.0
+        self.Thermo['chartPmax'] = 0.0
+
+    #
+    # define sepcial functions to get fluid properties
+
+    def getTCrit(self):
+        return self.Thermo['TCrit']
+
+    def getPCrit(self):
+        return self.Thermo['PCrit']
+
+    def getvCrit(self):
+        return self.Thermo['vCrit']
+
+    def getFluidName(self):
+        return self.Thermo['FluidName']
+
+    def getFluidFormula(self):
+        return self.Thermo['FluidFormula']
+
+    def getMW(self):
+        return self.Thermo['MW']
+
+    def getStanfordT0(self):
+        if self.Thermo['Stanfordeos'].lower() == "true":
+            return self.Thermo['StanfordT0']
+        else:
+            print ("Stanford props not defined")
+            return -1
 
     #
     # Define get/set functions for thermo properties
@@ -94,7 +129,7 @@ class ThermoProps(object):
         self.Thermo['NBSUnitSys'] = u
         return
 
-    def setJob(strjob):
+    def setJob(self,strjob):
         jobl = strjob.lower()
         if jobl == 'tp' or jobl == 'pt':
             setJobID(1)
@@ -204,6 +239,35 @@ class ThermoProps(object):
     def getchartNumLines(self):
         return self.Thermo['chartNumLines']
 
+    def setchartTmin(self, tmin):
+        self.Thermo['chartTmin'] = tmin
+        return
+
+    def getchartTmin(self):
+        return self.Thermo['chartTmin']
+
+
+    def setchartTmax(self, tmax):
+        self.Thermo['chartTmax'] = tmax
+        return
+
+    def getchartTmax(self):
+        return self.Thermo['chartTmax']
+
+    def setchartPmin(self, pmin):
+        self.Thermo['chartPmin'] = Pmin
+        return
+
+    def getchartPmin(self):
+        return self.Thermo['chartPmin']
+
+
+    def setchartPmax(self, pmax):
+        self.Thermo['chartPmax'] = pmax
+        return
+
+    def getchartPmax(self):
+        return self.Thermo['chartPmax']
 
     def calcProps(self):
         eos = self.Thermo['eos']
@@ -534,15 +598,213 @@ class ThermoProps(object):
 
         if eos in ['NBS', 'Stanford']:
             print ('OK')
+            chartData = []
+            if self.Thermo['chartType'] == 'ts':
+                #
+                # make a T-s chart
+               self.tsChart(chartData)
+            else:
+                #
+                # right now pass
+                pass
+
+            xvals = []
+            yvals = []
+            for dataset in chartData:
+                (xvals,yvals) = dataset
+                plt.plot(xvals,yvals)
+
+            plt.show()
+
+            
         else:
             print ('Invalid eos for charts')
+
+
+
+            return
+
+    def tsChart(self, chartData):
+        """
+        this function will generate the data for a 
+        T-s diagram for the specified fluid
+        and store the data in the chartData list
+        """
+
+        #
+        # get the bounds values for the iso lines
+        Tcrit = self.getTCrit()
+        T0 = self.getStanfordT0()
+
+        Tmax = self.getchartTmax()
+        if Tmax == 0:
+            Tmax = Tcrit
+
+        Tmin = self.getchartTmin()
+
+        if Tmin == 0.0:
+            Tmin = T0
+
+        numlines = self.Thermo['chartNumLines']
+        numSatPoints = 80
+        
+        #
+        # set the number of sat dome points 
+        # and deltaT for saturation calcs
+
+        satDomes = []
+        satDomeT = []
+
+        deltaT = (Tcrit - T0)/(numSatPoints + 1)
+        Tcurr = T0
+        #
+        # start by going up the sat liq side of the dome
+        self.setQuality(0.0)
+        self.setJobID(4)
+        for i in range(numSatPoints):
+            Tcurr = Tcurr + deltaT
+            self.setTemperature(Tcurr)
+            self.calcProps()
+            satDomeT.append(self.getTemperature())
+            satDomes.append(self.getSpecificEntropy())
+
+        #
+        # now add the sat vap side of the dome
+        self.setQuality(1.0)
+        Tcurr = Tcrit
+        for i in range(numSatPoints):
+            Tcurr = Tcurr - deltaT
+            self.setTemperature(Tcurr)
+            self.calcProps()
+            satDomeT.append(self.getTemperature())
+            satDomes.append(self.getSpecificEntropy())
+        
+        chartData.append((satDomes, satDomeT))
+
+        #
+        # get the chart iso line variable
+        # and set the number of points
+
+        chartIso = self.Thermo['chartIso']
+        numPoints = 30
+        deltaT = (Tcrit - T0)/(numPoints + 1)
+
+        isoT = []
+        isos = []
+        
+        for isovar in chartIso:
+
+            if isovar == 'x':
+                #
+                # iso lines for quality
+                dx = 1.0/(numlines + 1.0)
+                x = 0.0
+                #
+                # set delta T based on T0 and Tcrit
+                deltaT = (Tcrit - T0)/(numPoints + 1)
+
+                numSets = len(isoT)
+                for n in range(numlines):
+                    setNum = n + numSets
+                    isoT.append([])
+                    isos.append([])
+                    Tcurr = T0
+                    x = x + dx
+                    self.setQuality(x)
+                    for m in range(numPoints):
+                        Tcurr = Tcurr + deltaT
+                        self.setTemperature(Tcurr)
+                        self.calcProps()
+                        isoT[setNum].append(self.getTemperature())
+                        isos[setNum].append(self.getSpecificEntropy())
+
+            elif isovar == 'p':
+                #
+                # iso lines for pressure
+                # 
+
+                # note that the user can specify 
+                # a max > Tcrit, so we need to 
+                # have a check on that for the iso lines
+
+                deltaT = (Tmax - Tmin)/(numPoints + 1)
+
+                #
+                # get Pmin and Pmax
+
+                Pmax = self.getchartPmax()
+                if Pmax == 0:
+                    Pmax = self.getPCrit()
+
+                Pmin = self.getchartPmin()
+                if Pmin == 0: 
+                    #
+                    # need to get pmin = psat(Tmin)
+                    self.setTemperature(Tmin)
+                    self.setQuality(0.0)
+                    self.setJobID(4)
+                    self.calcProps()
+                    Pmin = self.getPressure()
+
+
+                if Tcurr < Tcrit:
+                    self.setTemperature(Tcurr)
+                    self.setQuality(0.0)
+                    self.setJobID(4)
+                    self.calcProps()
+                    psat = self.getPressure()
+
+                pcrit = self.getPCrit()
+                dp = (pcrit - psat)/(numlines + 1.0)
+                numSets = len(isoT)
+                for n in range(numlines):
+                    setNum = n + numSets
+                    #
+                    # create a new set of data
+                    isoT.append([])
+                    isos.append([])
+                    #
+                    # add the saturation points for the 
+                    # isobaric lines
+
+                    self.setPressure(psat)
+                    self.setQuality(0.0)
+                    self.setJobID(8)
+                    self.calcProps()
+                    isoT[setNum].append(self.getTemperature())
+                    isos[setNum].append(self.getSpecificEntropy())
+                    self.setQuality(1.0)
+                    self.setJobID(8)
+                    self.calcProps()
+                    isoT[setNum].append(self.getTemperature())
+                    isos[setNum].append(self.getSpecificEntropy())
+                    self.setJobID(1)
+                    Tcurr = self.getTemperature()
+                    for m in range(numPoints):
+                        Tcurr = Tcurr + deltaT
+                        self.setTemperature(Tcurr)
+                        self.calcProps()
+                        isoT[setNum].append(self.Thermo['Temperature'])
+                        isos[setNum].append(self.Thermo['SpEntropy'])
+
+                    psat = psat + dp
+
+
+       
+        for n in range(len(isoT)):            
+            chartData.append((isos[n],isoT[n]))
+
+        return 
+
+
+
 
 
         
 def main():
     # parse command line options
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:cf:j:p:t:e:u:x:v:", ["help","chart","iso","numlines"])
+        opts, args = getopt.getopt(sys.argv[1:], "h:cf:j:p:t:e:u:x:v:", ["help","chart=","iso=","numlines=","tmin=","tmax=","pmin=","pmax="])
         
     except getopt.error as msg:
         print (msg)
@@ -576,9 +838,28 @@ def main():
             props.setJobID(int(arg,10))
         if o in ("-u"):
             props.setUnitSys(int(arg,10))
+        if o in ("--chart"):
+            props.setchartType(arg)
+        if o in ("--iso"):
+            props.setchartIsoLines(arg)
+        if o in ("--numlines"):
+            props.setchartNumIsoLines(int(arg,10))
+        if o in ("--tmin"):
+            props.setchartTmin(float(arg))
+        if o in ("--tmax"):
+            props.setchartTmax(float(arg))
+        if o in ("--pmin"):
+            props.setchartTmin(float(arg))
+        if o in ("--pmax"):
+            props.setchartTmax(float(arg))
 
 
-    props.calcProps()
+
+
+    if props.getchartType() == 'none':
+        props.calcProps()
+    else:
+        props.makeChart()
 
     print (props.Thermo['FluidName'],props.Thermo['eos'], props.Thermo['MW'], props.Thermo['job'])
     print ('P = ', props.Thermo['Pressure'], 'T = ', props.Thermo['Temperature'], 'v = ', props.Thermo['SpVol'])

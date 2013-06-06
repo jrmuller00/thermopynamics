@@ -13,7 +13,7 @@
     <Name>thermopynamics</Name>
     <RootNamespace>thermopynamics</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-p 101325 -t 500 -f water -e NBS -j 1 -u 4</CommandLineArguments>
+    <CommandLineArguments>--chart ts --iso xp --numlines 10 -f water -e Stanford</CommandLineArguments>
     <InterpreterPath />
     <InterpreterArguments />
   </PropertyGroup>

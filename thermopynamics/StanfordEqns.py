@@ -4426,6 +4426,27 @@ def vfts(v,str, thermo):
     thermo['SpVol'] = vsave
     return scalc - thermo['sActual']
 
+def vth(thermconst):
+    thermconst['hActual'] = thermconst['SpEnthalpy']
+    v0 = thermconst['SpVol']
+    thermtuple = 'Stanford vth',thermconst
+    #print (thermtuple, type(thermtuple)
+    v = scipy.optimize.newton(vfth, v0, None, thermtuple)
+    return v
+
+def vfth(v,str, thermo):
+    vsave = thermo['SpVol']
+    thermo['SpVol'] = v
+    P = thermo['pvt'](thermo)
+    thermo['Pressure'] = P
+    (cx, cxint, cxtint) = thermo['cvfunc'](thermo)
+    (udvint, sdvint) = thermo['dvint'](thermo)
+    u = cxint + udvint + thermo['xRef']
+    hcalc = u + thermo['Pressure']*thermo['SpVol']
+    #print ('vftp, v = ', v)
+    thermo['SpVol'] = vsave
+    return hcalc - thermo['hActual']
+
 def tph(thermconst):
     thermconst['hActual'] = thermconst['SpEnthalpy']
     T0 = thermconst['Temperature']
@@ -4577,7 +4598,7 @@ def calcuhsx(thermconst):
             thermconst['SpEntropy'] = s + (x - 1) * sfg
         elif thermconst['2phaseprop'] == 'x':
             x = thermconst['Quality']
-            print (vf, vg)
+            #print (vf, vg)
             v = vf + x * (vg - vf)
             thermconst['SpVol'] = v
             thermconst['SpEnthalpy'] = h  + (x-1)*hfg
