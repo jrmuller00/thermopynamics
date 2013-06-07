@@ -255,7 +255,7 @@ class ThermoProps(object):
         return self.Thermo['chartTmax']
 
     def setchartPmin(self, pmin):
-        self.Thermo['chartPmin'] = Pmin
+        self.Thermo['chartPmin'] = pmin
         return
 
     def getchartPmin(self):
@@ -642,7 +642,7 @@ class ThermoProps(object):
 
         Tmin = self.getchartTmin()
 
-        if Tmin == 0.0:
+        if Tmin < T0:
             Tmin = T0
 
         numlines = self.Thermo['chartNumLines']
@@ -727,37 +727,34 @@ class ThermoProps(object):
                 # a max > Tcrit, so we need to 
                 # have a check on that for the iso lines
 
-                deltaT = (Tmax - Tmin)/(numPoints + 1)
+
+
+                #
+                # get pcrit and Psat(T0)
+                pcrit = self.getPCrit()
+                self.setTemperature(self.getStanfordT0())
+                self.setQuality(0.0)
+                self.setJobID(4)
+                self.calcProps()
+                psat0 = self.getPressure()
 
                 #
                 # get Pmin and Pmax
 
                 Pmax = self.getchartPmax()
-                if Pmax == 0:
-                    Pmax = self.getPCrit()
+                if Pmax == 0 or Pmax > pcrit:
+                    Pmax = pcrit
 
                 Pmin = self.getchartPmin()
-                if Pmin == 0: 
-                    #
-                    # need to get pmin = psat(Tmin)
-                    self.setTemperature(Tmin)
-                    self.setQuality(0.0)
-                    self.setJobID(4)
-                    self.calcProps()
-                    Pmin = self.getPressure()
-
-
-                if Tcurr < Tcrit:
-                    self.setTemperature(Tcurr)
-                    self.setQuality(0.0)
-                    self.setJobID(4)
-                    self.calcProps()
-                    psat = self.getPressure()
-
-                pcrit = self.getPCrit()
-                dp = (pcrit - psat)/(numlines + 1.0)
+                if Pmin == psat0 or Pmin > pcrit: 
+                    Pmin = psat0
+                
+                dp = (Pmax - Pmin)/(numlines + 1.0)
                 numSets = len(isoT)
+                psat = Pmin
+
                 for n in range(numlines):
+                    psat = psat + dp
                     setNum = n + numSets
                     #
                     # create a new set of data
@@ -771,25 +768,24 @@ class ThermoProps(object):
                     self.setQuality(0.0)
                     self.setJobID(8)
                     self.calcProps()
-                    isoT[setNum].append(self.getTemperature())
+                    tsat = self.getTemperature()
+                    isoT[setNum].append(tsat)
                     isos[setNum].append(self.getSpecificEntropy())
                     self.setQuality(1.0)
                     self.setJobID(8)
                     self.calcProps()
-                    isoT[setNum].append(self.getTemperature())
+                    isoT[setNum].append(tsat)
                     isos[setNum].append(self.getSpecificEntropy())
                     self.setJobID(1)
-                    Tcurr = self.getTemperature()
+                    Tcurr = tsat
+
+                    deltaT = (Tmax - Tcurr)/(numPoints + 1)
                     for m in range(numPoints):
                         Tcurr = Tcurr + deltaT
                         self.setTemperature(Tcurr)
                         self.calcProps()
                         isoT[setNum].append(self.Thermo['Temperature'])
                         isos[setNum].append(self.Thermo['SpEntropy'])
-
-                    psat = psat + dp
-
-
        
         for n in range(len(isoT)):            
             chartData.append((isos[n],isoT[n]))
@@ -849,9 +845,9 @@ def main():
         if o in ("--tmax"):
             props.setchartTmax(float(arg))
         if o in ("--pmin"):
-            props.setchartTmin(float(arg))
+            props.setchartPmin(float(arg))
         if o in ("--pmax"):
-            props.setchartTmax(float(arg))
+            props.setchartPmax(float(arg))
 
 
 
