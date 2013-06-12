@@ -144,6 +144,7 @@ Function Stanford will calculate the
                 region = 'SHV'
             elif (v > vf) & (v < vg):
                 region = '2phase'
+                thermconst['Pressure'] = psat
             else:
                 region = 'CL'
 
@@ -184,6 +185,9 @@ Function Stanford will calculate the
 
             if s > sg:
                 region = 'SHV'
+                thermconst['SpVol'] = vg
+                v = vts(thermconst)
+                thermconst['SpVol'] = v
             elif (s > (sg - sfg)):
                 region = '2phase'
             else:
@@ -401,6 +405,50 @@ Function Stanford will calculate the
         #
         # if 2 phase set variable
         thermconst['2phaseprop'] = 'x'
+        calcuhsx(thermconst)
+
+    #
+    # case 9, inputs are T, h
+
+    elif job == 9:
+        T = thermconst['Temperature']
+        h = thermconst['SpEnthalpy']
+        vtp = thermconst['vtp']
+                #
+        # set the region
+        if T > Tc:
+            region = 'SC'
+            vg = thermconst['vCrit']
+        else:
+            psat = thermconst['psat'](thermconst)
+            rhosat = thermconst['rhosat'](thermconst)
+            vf = 1/rhosat
+            #
+            # calculate vg
+            thermconst['Pressure'] = psat
+            thermconst['SpVol'] = ideal.vtp(thermconst)
+            vg = vtp(thermconst)
+            (cx, cxint, cxtint) = thermconst['cvfunc'](thermconst)
+            (udvint, sdvint) = thermconst['dvint'](thermconst)
+            ug = cxint + udvint + thermconst['xRef']
+            sg = cxtint + sdvint + thermconst['sRef']
+            hg = ug + psat*vg
+            (hfg, sfg) = calchfgsfg(thermconst)
+            print ('Job 9: T = ',T,' h = ',h,' hg = ',hg)
+            
+            if h > hg:
+                region = 'SHV'
+                thermconst['SpVol']  = vg
+                v = vth(thermconst)
+                thermconst['SpVol'] = v
+            elif (h > (hg - hfg)):
+                region = '2phase'
+            else:
+                region = 'CL'
+        thermconst['Region'] = region
+        #
+        # if 2 phase set variable
+        thermconst['2phaseprop'] = 'h'
         calcuhsx(thermconst)
 
     return
@@ -4570,13 +4618,29 @@ def calcuhsx(thermconst):
         thermconst['SpEntropy'] = s
         thermconst['Quality'] = -1
     elif region == '2phase':
-        (hfg, sfg) = calchfgsfg(thermconst)
+
+        psat = thermconst['psat'](thermconst)
+        vsave = thermconst['SpVol']
+        #
+        # calculate vg
+        thermconst['Pressure'] = psat
+        thermconst['SpVol'] = ideal.vtp(thermconst)
         vg = vtp(thermconst)
         rhosat = thermconst['rhosat'](thermconst)
         vf = 1/rhosat
+        
+        thermconst['SpVol'] = vg
+        (cx, cxint, cxtint) = thermconst['cvfunc'](thermconst)
+        (udvint, sdvint) = thermconst['dvint'](thermconst)
+        u = cxint + udvint + thermconst['xRef']
+        h = u + thermconst['Pressure'] * thermconst['SpVol']
+        s = cxtint + sdvint + thermconst['sRef']
+        (hfg, sfg) = calchfgsfg(thermconst)
+        thermconst['SpVol'] = vsave
+
         if thermconst['2phaseprop'] == 'h':
             hactual = thermconst['SpEnthalpy']
-            print (hactual, hfg)
+            #print (hactual, hfg)
             x = 1 + ((hactual - h)/hfg)
             v = vf + x * (vg - vf)
             thermconst['SpVol'] = v
@@ -4593,9 +4657,12 @@ def calcuhsx(thermconst):
         elif thermconst['2phaseprop'] == 'v':
             vactual = thermconst['SpVol']
             x = 1 + ((vactual - vg)/(vg - vf))
+            if x > 1.0:
+                pass
             thermconst['SpEnthalpy'] = h  + (x-1)*hfg
             thermconst['SpEnergy'] = thermconst['SpEnthalpy'] - thermconst['Pressure'] * vactual
             thermconst['SpEntropy'] = s + (x - 1) * sfg
+            thermconst['Quality'] = x
         elif thermconst['2phaseprop'] == 'x':
             x = thermconst['Quality']
             #print (vf, vg)
