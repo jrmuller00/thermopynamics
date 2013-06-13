@@ -175,7 +175,7 @@ StanfordF3	= float	-5.67888940e-1
 StanfordF4	= float	1.32786231
 StanfordPt	= float	11743.5675
 StanfordTt	= float	90.68
-StanfordSalpha	= float	 1.5
+StanfordFalpha	= float	 1.5
 #  
 #  STANFORDPSAT_END
 #  

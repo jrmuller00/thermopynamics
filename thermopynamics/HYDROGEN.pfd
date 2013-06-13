@@ -150,7 +150,7 @@ StanfordF3      = float       -6.55461216567e-1
 StanfordF4      = float        1.59514439374
 StanfordPt      = float        7042.09
 StanfordTt      = float        13.8
-StanfordSalpha   = float        1.5814454428
+StanfordFalpha   = float        1.5814454428
 
 #
 #

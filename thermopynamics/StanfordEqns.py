@@ -3035,10 +3035,10 @@ def dpsatdt1(thermconst):
     Psat = math.exp(Psat)
 
     dPdT = (-F2/(T*T)) + (F3/T) + F4
-    logterm = math.log(gamma -T)
-    term = gamma -T
+    term = gamma - T
 
-    if (F5 != 0):
+    if (F5 != 0.0):
+        logterm = math.log(term)
         dPdT = dPdT - ((F5 * gamma * logterm + F5 * T)/(T*T))
     dPdT = Psat*dPdT
     return dPdT
@@ -3238,6 +3238,7 @@ def psat4(thermconst):
     F8 = thermconst['StanfordF8']
     F9 = thermconst['StanfordF9']
     alpha = thermconst['StanfordFalpha']
+    Tc = thermconst['TCrit']
 
     #    
     # set powers of T
@@ -3271,6 +3272,7 @@ def dpsatdt4(thermconst):
     F8 = thermconst['StanfordF8']
     F9 = thermconst['StanfordF9']
     alpha = thermconst['StanfordFalpha']
+    Tc = thermconst['TCrit']
 
     #    
     # set powers of T
@@ -3288,7 +3290,7 @@ def dpsatdt4(thermconst):
 
     dPdT = Psat*((-F1/T2) + F3 + 3*F5*T2 + 4*F6*T3 + 5*F7*T4 + 6*F8*T5 + (F9/T));
     
-    dPdT = dPdT - (Psat*(alpha*F4*((Tc-T)**alpha-1)))
+    dPdT = dPdT - (Psat*(alpha*F4*((Tc-T)**(alpha-1))))
                         
     return dPdT
 
@@ -3598,7 +3600,7 @@ def cv1(thermconst):
 
     loadArray(thermconst,G,'StanfordG',1,6)
 
-    print (G)
+    #print (G)
     #
     # calculate cv
 
@@ -3655,7 +3657,7 @@ def cv2(thermconst):
 
     loadArray(thermconst,G,'StanfordG',1,N+1)
 
-    print (G)
+    #print (G)
     #
     # calculate cv
 

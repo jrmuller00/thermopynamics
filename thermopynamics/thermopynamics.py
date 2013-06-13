@@ -624,7 +624,31 @@ class ThermoProps(object):
                 # add text label to data
                 if i > 1:
                     midindex = int(len(xvals)/2)
-                    plt.annotate(zvals[i-2],xy=(xvals[midindex],yvals[midindex]))
+                    xmin = min(xvals)
+                    xmax = max(xvals)
+                    ymin = min(yvals)
+                    ymax = max(yvals)
+                    dxtot = xmax - xmin
+                    dytot = ymax - ymin
+                    x1 = xvals[midindex]
+                    y1 = yvals[midindex]
+                    x2 = xvals[midindex + 5]
+                    y2 = yvals[midindex + 5]
+                    dx = (x2 - x1)/dxtot
+                    dy = (y2 - y1)/dytot
+                    if math.fabs(dx) <= 1e-2:
+                        #
+                        # approx zero
+                        rotate = 90
+                    elif math.fabs(dy) < 1e-2:
+                        #
+                        # approx 0
+                        rotate = 0
+                    else:
+                        rotate = math.degrees(math.atan(dy/dx))
+
+
+                    plt.annotate(zvals[i-2],xy=(xvals[midindex],yvals[midindex]),rotation=rotate)
                 #plt.contour(xvals,yvals,zvals,zvals)
             
             plt.show()
@@ -650,6 +674,7 @@ class ThermoProps(object):
         # get the bounds values for the iso lines
         Tcrit = self.getTCrit()
         T0 = self.getStanfordT0()
+        alpha = 0.99
 
         Tmax = self.getchartTmax()
         if Tmax == 0:
@@ -671,7 +696,7 @@ class ThermoProps(object):
         satDomeT = []
         satDomex = []
 
-        deltaT = (Tcrit - T0)/(numSatPoints + 1)
+        deltaT = (alpha*Tcrit - T0)/(numSatPoints + 1)
         Tcurr = T0
         #
         # start by going up the sat liq side of the dome
@@ -683,18 +708,20 @@ class ThermoProps(object):
             self.calcProps()
             satDomeT.append(self.getTemperature())
             satDomes.append(self.getSpecificEntropy())
+            #print (self.getRegion(), Tcurr, self.getQuality(), self.getSpecificEntropy())
 #            satDomex.append(0.0)
 
         #
         # now add the sat vap side of the dome
         self.setQuality(1.0)
-        Tcurr = Tcrit
+        Tcurr = alpha*Tcrit
         for i in range(numSatPoints):
             Tcurr = Tcurr - deltaT
             self.setTemperature(Tcurr)
             self.calcProps()
             satDomeT.append(self.getTemperature())
             satDomes.append(self.getSpecificEntropy())
+            #print (self.getRegion(), Tcurr, self.getQuality(), self.getSpecificEntropy())
  #           satDomex.append(1.0)
 
         # make room for the labels

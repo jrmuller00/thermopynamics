@@ -43,7 +43,7 @@ NBSeos = str false
 Stanford_rhosat = int 2
 Stanford_cv = int 6
 Stanford_psat = int 2
-Stanford_pvt = int 3
+Stanford_pvt = int 2
 
 
 #
