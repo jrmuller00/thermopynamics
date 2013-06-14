@@ -615,27 +615,43 @@ class ThermoProps(object):
             yvals = []
             zvals = chartData[0]
             n = 0
+            dxmax = 0.0
+            dymax = 0.0
+
+            for i in range(2,len(chartData)):
+                (xvals,yvals) = chartData[i]
+                xmin = min(xvals)
+                xmax = max(xvals)
+                ymin = min(yvals)
+                ymax = max(yvals)
+                dx = math.fabs(xmax - xmin)
+                dy = math.fabs(ymax - ymin)
+                if dx > dxmax:
+                    dxmax = dx
+                if dy > dymax:
+                    dymax = dy
+
+            colors = ['black','blue','green','red','yellow']
+            colorindex = 0
+            numlines = self.getchartNumLines()
             for i in range(1,len(chartData)):
                 (xvals,yvals) = chartData[i]
                 #line = plt.Line2D(xvals,yvals,label="line "+str(n))
                 line =  plt.plot(xvals,yvals)
-                plt.setp(line,color='b')
+                plt.setp(line,color=colors[colorindex])
                 #
                 # add text label to data
                 if i > 1:
+                    if (i-2) % numlines == 0:
+                        colorindex = colorindex + 1
+                    plt.setp(line,color=colors[colorindex])
                     midindex = int(len(xvals)/2)
-                    xmin = min(xvals)
-                    xmax = max(xvals)
-                    ymin = min(yvals)
-                    ymax = max(yvals)
-                    dxtot = xmax - xmin
-                    dytot = ymax - ymin
                     x1 = xvals[midindex]
                     y1 = yvals[midindex]
                     x2 = xvals[midindex + 5]
                     y2 = yvals[midindex + 5]
-                    dx = (x2 - x1)/dxtot
-                    dy = (y2 - y1)/dytot
+                    dx = (x2 - x1)/dxmax
+                    dy = (y2 - y1)/dymax
                     if math.fabs(dx) <= 1e-2:
                         #
                         # approx zero
@@ -647,9 +663,15 @@ class ThermoProps(object):
                     else:
                         rotate = math.degrees(math.atan(dy/dx))
 
+                    #print (zvals[i-2],'rotate = ',rotate, 180-math.fabs(rotate))
+                    if rotate < 0:
+                        rotate = 180-math.fabs(rotate)
+                    plt.annotate(zvals[i-2],xy=(xvals[midindex],yvals[midindex]), xytext=(xvals[midindex],yvals[midindex]),xycoords='data',ha="center", va="center", rotation=(rotate))
 
-                    plt.annotate(zvals[i-2],xy=(xvals[midindex],yvals[midindex]),rotation=rotate)
                 #plt.contour(xvals,yvals,zvals,zvals)
+
+            plt.xlabel("s [J/kg]")
+            plt.ylabel('T [K]')
             
             plt.show()
 

@@ -13,7 +13,7 @@
     <Name>thermopynamics</Name>
     <RootNamespace>thermopynamics</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-f nitrogen -e Stanford --chart ts --numlines 3 --iso px</CommandLineArguments>
+    <CommandLineArguments>-f nitrogen  -e Stanford --chart ts --numlines 4 --iso pxv</CommandLineArguments>
     <InterpreterPath />
     <InterpreterArguments />
   </PropertyGroup>

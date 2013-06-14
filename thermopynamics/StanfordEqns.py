@@ -434,7 +434,7 @@ Function Stanford will calculate the
             sg = cxtint + sdvint + thermconst['sRef']
             hg = ug + psat*vg
             (hfg, sfg) = calchfgsfg(thermconst)
-            print ('Job 9: T = ',T,' h = ',h,' hg = ',hg)
+            #print ('Job 9: T = ',T,' h = ',h,' hg = ',hg)
             
             if h > hg:
                 region = 'SHV'
