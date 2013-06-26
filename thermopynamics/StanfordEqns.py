@@ -247,7 +247,9 @@ Function Stanford will calculate the
             vf = 1/rhosat
             #
             # calculate vg
+            thermconst['SpVol'] = ideal.vtp(thermconst)
             vg = vtp(thermconst)
+            thermconst['SpVol'] = v
             if v > vg:
                 region = 'SHV'
                 thermconst['SpVol'] = v
@@ -357,6 +359,7 @@ Function Stanford will calculate the
             # calculate vg
             thermconst['SpVol'] = ideal.vtp(thermconst)
             vg = vtp(thermconst)
+            thermconst['SpVol'] = vg
             thermconst['Region'] = 'SHV'
             calcuhsx(thermconst)
             sg = thermconst['SpEntropy']
@@ -368,7 +371,7 @@ Function Stanford will calculate the
                 region = 'SHV'
                 #
                 # use a guess for temperature
-                thermconst['Temperature'] = 0.75*Tc
+                thermconst['Temperature'] = tsat
                 T = tps(thermconst)
                 thermconst['Temperature'] = T
                 thermconst['SpVol'] = ideal.vtp(thermconst)
@@ -393,7 +396,7 @@ Function Stanford will calculate the
         x = thermconst['Quality']
         vtp = thermconst['vtp']
         region = '2phase'
-        thermconst['Temperature'] = 0.75*Tc
+        thermconst['Temperature'] = 0.5*Tc
         tsat = thermconst['tsat'](thermconst)
         thermconst['Temperature'] = tsat
         #
@@ -4442,13 +4445,15 @@ def tfpv(T,str, thermo):
 
 def tsat(thermo):
     thermo['pActual'] = thermo['Pressure']
+    Tc = thermo['TCrit']
+    T0 = thermo['StanfordT0']
     Tsat = thermo['Temperature']
     thermtuple = 'Stanford tsat',thermo
     #print (thermtuple, type(thermtuple))
-    T = scipy.optimize.newton(tsatfp, Tsat, None, thermtuple)
+    T = scipy.optimize.brentq(tsatfp,T0,Tc, thermo)
     return T
 
-def tsatfp(T,str, thermo):
+def tsatfp(T,thermo):
     Tsave = thermo['Temperature']
     thermo['Temperature'] = T
     #print ('Stanford in tsatfp', T)
@@ -4522,13 +4527,45 @@ def tfph(T,str, thermo):
 
 def tps(thermconst):
     thermconst['sActual'] = thermconst['SpEntropy']
-    T0 = thermconst['Temperature']
+    Tc = thermconst['TCrit']
+    T0 = thermconst['StanfordT0']
+    Tg = thermconst['Temperature']
+    #
+    # Need to bracket solution
+
+    if (Tg < T0) or (Tg > Tc):
+        Tg = (Tc + T0) / 2.0
+
+    #
+    # set up loop to find brackets
+    deltaT = 10
+    fg = tfps(Tg, thermconst)
+
+    findBrackets = True
+    i = 1
+    while (findBrackets == True) and (i < 500):
+        Tb = Tg + deltaT * i
+        fb = tfps(Tb, thermconst)
+
+        if fb * fg < 0:
+            findBrackets = False
+        else:
+            if math.fabs(fb) > math.fabs(fg):
+                deltaT = -deltaT
+            i = i + 1
+
+    if i >= 500:
+        print ('No brackets found',Tg,Tb,i*deltaT,fg,fb)
+        exit(0)
+
     thermtuple = 'Stanford tps',thermconst
     #print (thermtuple, type(thermtuple)
-    T = scipy.optimize.newton(tfps, T0, None, thermtuple)
+    #T = scipy.optimize.newton(tfps, T0, None, thermtuple)
+    T = scipy.optimize.brentq(tfps,Tg,Tb, thermconst)
     return T
 
-def tfps(T,str, thermo):
+#def tfps(T,str, thermo):
+def tfps(T,thermo):
     Tsave = thermo['Temperature']
     vsave = thermo['SpVol']
     thermo['Temperature'] = T
@@ -4620,12 +4657,19 @@ def calcuhsx(thermconst):
         thermconst['SpEntropy'] = s
         thermconst['Quality'] = -1
     elif region == '2phase':
-
-        psat = thermconst['psat'](thermconst)
         vsave = thermconst['SpVol']
+        hactual = thermconst['SpEnthalpy']
+        sactual = thermconst['SpEntropy']
+        vactual = thermconst['SpVol']
+        if thermconst['job'] < 5:
+            psat = thermconst['psat'](thermconst)
+            thermconst['Pressure'] = psat
+        else:
+            tsat = thermconst['tsat'](thermconst)
+            thermconst['Temperature'] = tsat
         #
         # calculate vg
-        thermconst['Pressure'] = psat
+        
         thermconst['SpVol'] = ideal.vtp(thermconst)
         vg = vtp(thermconst)
         rhosat = thermconst['rhosat'](thermconst)
@@ -4641,7 +4685,6 @@ def calcuhsx(thermconst):
         thermconst['SpVol'] = vsave
 
         if thermconst['2phaseprop'] == 'h':
-            hactual = thermconst['SpEnthalpy']
             #print (hactual, hfg)
             x = 1 + ((hactual - h)/hfg)
             v = vf + x * (vg - vf)
@@ -4650,14 +4693,12 @@ def calcuhsx(thermconst):
             thermconst['SpEntropy'] = s + (x - 1) * sfg
             thermconst['Quality'] = x
         elif thermconst['2phaseprop'] == 's':
-            sactual = thermconst['SpEntropy']
             x = 1 + ((sactual - s)/sfg)
             v = vf + x * (vg - vf)
             thermconst['SpEnthalpy'] = h  + (x-1)*hfg
             thermconst['SpEnergy'] = thermconst['SpEnthalpy'] - thermconst['Pressure'] * v
             thermconst['Quality'] = x
         elif thermconst['2phaseprop'] == 'v':
-            vactual = thermconst['SpVol']
             x = 1 + ((vactual - vg)/(vg - vf))
             if x > 1.0:
                 pass

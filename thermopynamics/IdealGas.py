@@ -28,7 +28,7 @@ def pvt(thermconsts):
 # T = P v / R
 def tpv(thermconsts):
     Rgas = thermc.R_BAR/thermconsts['MW']
-    print (Rgas, thermconsts['Pressure'] ,thermconsts['SpVol'])
+   # print (Rgas, thermconsts['Pressure'] ,thermconsts['SpVol'])
     return thermconsts['Pressure'] * thermconsts['SpVol'] / Rgas
 
 

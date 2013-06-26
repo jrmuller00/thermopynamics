@@ -203,7 +203,7 @@ class ThermoProps(object):
         there are 3 types, T-s, P-h and P-v
         """
         typel =type.lower()
-        if typel in ['ts','hs','pv']:
+        if typel in ['ts','ph','pv']:
             self.Thermo['chartType'] = type
         else:
             print ('Invalid chart type')
@@ -598,6 +598,8 @@ class ThermoProps(object):
         """
 
         eos = self.Thermo['eos']
+        useLogx = False
+        useLogy = False
 
         if eos in ['NBS', 'Stanford']:
             print ('OK')
@@ -606,6 +608,13 @@ class ThermoProps(object):
                 #
                 # make a T-s chart
                self.tsChart(chartData)
+               yLabel = 'T [K]'
+               xLabel = 's [J/kg K]'
+            elif self.Thermo['chartType'] == 'ph':
+                self.phChart(chartData)
+                useLogy = True
+                xLabel = 'h [J/kg]'
+                yLabel = 'P [Pa]'
             else:
                 #
                 # right now pass
@@ -641,15 +650,15 @@ class ThermoProps(object):
                 plt.setp(line,color=colors[colorindex])
                 #
                 # add text label to data
-                if i > 1:
+                if (i > 1) and len(xvals) > 3:
                     if (i-2) % numlines == 0:
                         colorindex = colorindex + 1
                     plt.setp(line,color=colors[colorindex])
                     midindex = int(len(xvals)/2)
                     x1 = xvals[midindex]
                     y1 = yvals[midindex]
-                    x2 = xvals[midindex + 5]
-                    y2 = yvals[midindex + 5]
+                    x2 = xvals[midindex + 1]
+                    y2 = yvals[midindex + 1]
                     dx = (x2 - x1)/dxmax
                     dy = (y2 - y1)/dymax
                     if math.fabs(dx) <= 1e-2:
@@ -669,9 +678,14 @@ class ThermoProps(object):
                     plt.annotate(zvals[i-2],xy=(xvals[midindex],yvals[midindex]), xytext=(xvals[midindex],yvals[midindex]),xycoords='data',ha="center", va="center", rotation=(rotate))
 
                 #plt.contour(xvals,yvals,zvals,zvals)
+            if useLogx == True:
+                plt.xscale('log')
+            if useLogy == True:
+                plt.yscale('log')
 
-            plt.xlabel("s [J/kg]")
-            plt.ylabel('T [K]')
+            plt.xlabel(xLabel)
+            plt.ylabel(yLabel)
+
             
             plt.show()
 
@@ -1032,6 +1046,10 @@ class ThermoProps(object):
                         #print (self.getRegion(), Tcurr, hcurr, self.getQuality(), self.getSpecificEntropy())
 
                 print ("    Finished iso-enthalpy lines")
+
+            elif isovar in ('t','s'):
+                print ("Can't use t or s as iso vars for Ts chart")
+
        
         print ("Assembling data")
         chartData[0] = isoz
@@ -1042,7 +1060,380 @@ class ThermoProps(object):
         return 
 
 
+    def phChart(self, chartData):
+        """
+        this function will generate the data for a 
+        P-h diagram for the specified fluid
+        and store the data in the chartData list
+        """
 
+        print ("Creating saturation dome")
+
+        #
+        # get the bounds values for the iso lines
+        Pcrit = self.getPCrit()
+        Tcrit = self.getTCrit()
+        T0 = self.getStanfordT0()
+        self.setTemperature(T0)
+        self.setQuality(0.0)
+        self.setJobID(4)
+        self.calcProps()
+        P0 = self.getPressure()
+        alpha = 0.99
+
+
+
+        Pmax = self.getchartPmax()
+        if Pmax == 0:
+            Pmax = alpha*Pcrit
+
+        Pmin = self.getchartPmin()
+
+        if Pmin < P0:
+            Pmin = P0
+
+        Tmax = self.getchartTmax()
+        if Tmax == 0:
+            Tmax = Tcrit
+
+        Tmin = self.getchartTmin()
+
+        if Tmin < T0:
+            Tmin = T0
+
+        numlines = self.Thermo['chartNumLines']
+        numSatPoints = 80
+        
+        #
+        # set the number of sat dome points 
+        # and deltaT for saturation calcs
+
+        satDomeh = []
+        satDomeP = []
+        satDomex = []
+
+        deltaT = (alpha*Tcrit - T0)/(numSatPoints + 1)
+        Tcurr = T0
+        #
+        # start by going up the sat liq side of the dome
+        self.setQuality(0.0)
+        self.setJobID(4)
+        for i in range(numSatPoints):
+            Tcurr = Tcurr + deltaT
+            self.setTemperature(Tcurr)
+            self.calcProps()
+            satDomeP.append(self.getPressure())
+            satDomeh.append(self.getSpecificEnthalpy())
+            #print (self.getRegion(), Tcurr, self.getQuality(), self.getSpecificEntropy())
+#            satDomex.append(0.0)
+
+        #
+        # now add the sat vap side of the dome
+        self.setQuality(1.0)
+        Tcurr = alpha*Tcrit
+        for i in range(numSatPoints):
+            Tcurr = Tcurr - deltaT
+            self.setTemperature(Tcurr)
+            self.calcProps()
+            satDomeP.append(self.getPressure())
+            satDomeh.append(self.getSpecificEnthalpy())
+            #print (self.getRegion(), Tcurr, self.getQuality(), self.getSpecificEntropy())
+ #           satDomex.append(1.0)
+
+        # make room for the labels
+        chartData.append([])
+        chartData.append((satDomeh, satDomeP))
+
+        print ("    Finished saturation dome")
+
+        #
+        # get the chart iso line variable
+        # and set the number of points
+        
+        chartIso = self.Thermo['chartIso']
+        numPoints = 30
+        deltaT = (Tcrit - T0)/(numPoints + 1)
+
+        isoP = []
+        isoh = []
+        isoz = []
+        
+        for isovar in chartIso:
+
+            if isovar == 'x':
+                print ("Creating iso-quality lines")
+                #
+                # iso lines for quality
+                dx = 1.0/(numlines + 1.0)
+                x = 0.0
+                #
+                # set delta T based on T0 and Tcrit
+                deltaP = ((Pcrit-(0.1*Pcrit)) - P0)/(numPoints + 1)
+
+                numSets = len(isoP)
+                for n in range(numlines):
+                    setNum = n + numSets
+                    isoP.append([])
+                    isoh.append([])
+                    Pcurr = P0
+                    x = x + dx
+                    self.setQuality(x)
+                    self.setJobID(8)
+                    isoz.append('x = %.2f' % (x))
+                    for m in range(numPoints):
+                        Pcurr = Pcurr + deltaP
+                        self.setPressure(Pcurr)
+                        self.calcProps()
+                        isoP[setNum].append(self.getPressure())
+                        isoh[setNum].append(self.getSpecificEnthalpy())
+                        
+                        #print (self.getRegion(), Tcurr, self.getQuality(), self.getSpecificEntropy())
+                print ("    Finished iso-quality lines")
+                         
+            elif isovar == 't':
+                #
+                # iso lines for temperature
+                # 
+
+                # note that the user can specify 
+                # a max > Tcrit, so we need to 
+                # have a check on that for the iso lines
+                print ("Creating isothermal lines")
+
+                dt = (Tmax - Tmin)/(numlines + 1)
+
+                numSets = len(isoP)
+                tsat = Tmax
+
+                for n in range(numlines):
+                    tsat = tsat - dt
+                    setNum = n + numSets
+                    #
+                    # create a new set of data
+                    isoP.append([])
+                    isoh.append([])
+                    #
+                    # add the saturation points for the 
+                    # isothermal lines
+
+                    self.setTemperature(tsat)
+                    self.setQuality(0.0)
+                    self.setJobID(4)
+                    self.calcProps()
+                    psat = self.getPressure()
+                    isoP[setNum].append(psat)
+                    isoh[setNum].append(self.getSpecificEnthalpy())
+                    self.setQuality(1.0)
+                    self.setJobID(4)
+                    self.calcProps()
+                    psat = self.getPressure()
+                    isoP[setNum].append(psat)
+                    isoh[setNum].append(self.getSpecificEnthalpy())
+                    self.setJobID(1)
+                    Pcurr = psat
+
+                    deltaP = (Pcurr - Pmin)/(numPoints + 1)
+
+                    isoz.append('T = %1.2e' % (tsat))
+                    print ('---Saturation points set')
+                    for m in range(numPoints+1):
+                        Pcurr = Pcurr - deltaP
+                        self.setPressure(Pcurr)
+                        self.calcProps()
+                        isoP[setNum].append(Pcurr)
+                        isoh[setNum].append(self.getSpecificEnthalpy())
+                        #print (self.getRegion(), Pcurr, tsat, self.getQuality(), self.getSpecificEnthalpy())
+                print ("    Finished isothermal lines")
+                
+           
+            elif isovar == 'v':
+                #
+                # iso lines for specific volume
+                # 
+
+                # note that the user can specify 
+                # a max > Tcrit, so we need to 
+                # have a check on that for the iso lines
+
+                #
+                # get pcrit and Psat(T0)
+                print ("Creating iso-volume lines")
+                vcrit = self.getvCrit()
+
+                #
+                # set vmax = vg(Tmin,x = 1)
+                self.setPressure(Pmin)
+                self.setQuality(0.1)
+                self.setJobID(8)
+                self.calcProps()
+                vmax = self.getSpecificVolume()
+
+                #
+                # set vmin = v(Tmin, x = 0)
+                self.setPressure(Pmax)
+                self.setTemperature(Tcrit)
+                self.setJobID(1)
+                self.calcProps()
+                vmin = self.getSpecificVolume()   
+
+                #
+                # now check the ratio of vmax/vmin
+                # if it's large use ln to move thru
+                # values instead of linear
+
+                if vmax/vmin > 10:
+                    dv = math.log(vmax/vmin)/(numlines + 1.0)
+                    useLn = True
+                else:                    
+                    dv = (vmax - vmin)/(numlines + 1.0)
+                    useLn = False
+
+                numSets = len(isoP)
+                vcurr = vmin
+                
+                for n in range(numlines):
+                    if useLn:
+                        vcurr = math.exp(math.log(vcurr) + dv)
+                    else:
+                        vcurr = vcurr + dv
+                    #
+                    # Now choose Pstart = min(Pmax, P(Tcrit,vcurr)
+                    self.setTemperature(Tcrit)
+                    self.setSpecificVolume(vcurr)
+                    self.setJobID(2)
+                    self.calcProps()
+                    Pstart = min(Pmax,self.getPressure())
+                    deltaP = (Pstart - Pmin)/(numPoints + 1)
+                    self.setJobID(5)
+                    
+                    setNum = n + numSets
+                    #
+                    # create a new set of data
+                    isoP.append([])
+                    isoh.append([])
+                    #
+                    # add the saturation points for the 
+                    # iso volume lines
+
+                    Pcurr = Pstart
+                    isoz.append('v = %1.2e' % (vcurr))
+                    for m in range(numPoints):
+                        Pcurr = Pcurr - deltaP
+                        self.setPressure(Pcurr)
+                        if Pcurr < Pcrit:
+                            #
+                            # Find v = v(Pcurr,x = 0.1)
+                            self.setQuality(0.1)
+                            self.setJobID(8)
+                            self.calcProps()
+                            vstop = self.getSpecificVolume()
+                        else:
+                            vstop = 0
+                        if vstop < vcurr:
+                            self.setSpecificVolume(vcurr)
+                            self.setJobID(5)
+                            self.calcProps()
+                            isoP[setNum].append(self.getPressure())
+                            isoh[setNum].append(self.getSpecificEnthalpy())
+                            #print (self.getRegion(), Pcurr, vcurr, vstop, self.getQuality(), self.getSpecificEnthalpy())
+                        else:
+                            break
+
+                print ("    Finished iso-volume lines")
+                
+            
+            elif isovar == 's':
+                #
+                # iso lines for specific entropy
+                # 
+
+                # note that the user can specify 
+                # a max > Tcrit, so we need to 
+                # have a check on that for the iso lines
+
+                #
+                print ("Creating isentropic lines")
+
+                #
+                # set smax = sg(Pmin,x = 1)
+                self.setPressure(Pmin)
+                self.setQuality(1.0)
+                self.setJobID(8)
+                self.calcProps()
+                smax = self.getSpecificEntropy()
+
+                #
+                # set smin = sf(Pmax, x = 0)
+                self.setPressure(Pmin)
+                self.setQuality(0.1)
+                self.setJobID(8)
+                self.calcProps()
+                smin = self.getSpecificEntropy()
+
+                #
+                # now check the ratio of hmax/hmin
+                # if it's large use ln to move thru
+                # values instead of linear
+
+                if smax/smin > 10:
+                    ds = math.log(smax/smin)/(numlines + 1.0)
+                    useLn = True
+                else:                    
+                    ds = (smax - smin)/(numlines + 1.0)
+                    useLn = False
+
+                numSets = len(isoP)
+                scurr = smin
+                
+                for n in range(numlines):
+                    if useLn:
+                        scurr = math.exp(math.log(scurr) + ds)
+                    else:
+                        scurr = scurr + ds
+                    self.setJobID(7)
+                    self.setSpecificEntropy(scurr)
+                    setNum = n + numSets
+                    #
+                    # create a new set of data
+                    isoP.append([])
+                    isoh.append([])
+                    #
+                    # add the saturation points for the 
+                    # isentropic lines
+
+                    Pcurr = Pmin
+
+                    deltaP = (Pmax - Pmin)/(numPoints + 1)
+
+                    isoz.append('s = %1.2e'% (scurr))
+                    for m in range(numPoints):
+                        Pcurr = Pcurr + deltaP
+                        self.setPressure(Pcurr)
+                        self.calcProps()
+                        isoP[setNum].append(Pcurr)
+                        isoh[setNum].append(self.getSpecificEnthalpy())
+                        #
+                        # put a few checks on the output to stop collecting data
+                        # if x < 0.1 OR T > Tcrit, stop collecting points
+                        if (self.getQuality() < 0.1) or (self.getTemperature() > 2.0*Tcrit):
+                            break
+                        #print (self.getRegion(), Pcurr, scurr, self.getQuality(), self.getSpecificEnthalpy())
+
+                print ("    Finished isentropic lines")
+                
+            
+
+            elif isovar in ('p','h'):
+                print ("Can't use t or s as iso vars for Ph chart")
+
+       
+        print ("Assembling data")
+        chartData[0] = isoz
+        for n in range(len(isoP)):            
+            chartData.append((isoh[n],isoP[n]))
+        print ("    Data assembly complete")
+
+        return 
 
 
         
